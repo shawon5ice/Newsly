@@ -39,6 +39,8 @@ dependencies:
   shared_preferences:
   connectivity_plus:
   http:
+  firebase_crashlytics: ^2.8.10
+  firebase_core: ^1.22.0
 
 
   # The following adds the Cupertino Icons font to your application.
