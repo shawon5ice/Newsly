@@ -1,5 +1,5 @@
 // API
-const String baseUrl = "https://corporate3.bdjobs.com";
+const String baseUrl = "https://newsapi.org/v2";
 
 // Regular expression for form validation
 const String nameRegEx = '[a-zA-Z\\s]+';
