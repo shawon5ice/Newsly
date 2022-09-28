@@ -2,41 +2,52 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:newsly/home/presentation/ui/home_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newsly/core/theme/newsly_theme_data.dart';
+
+import 'core/di/app_component.dart';
+import 'core/routes/app_routes.dart';
+import 'core/routes/route.dart';
+import 'core/session/session_manager.dart';
 
 void main() async{
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    // The following lines are the same as previously explained in "Handling uncaught errors"
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  if(kDebugMode){
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  }
 
-    runApp(MyApp());
-  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  await AppComponent().init();
+  locator.isReady<SessionManager>().then((value) {
+    var session = locator<SessionManager>();
+    runApp(NewslyApp(session.isLoggedIn!));
+  });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  // This widget is the root of your application.
+class NewslyApp extends StatelessWidget {
+  final bool isLoggedIn;
+  const NewslyApp(this.isLoggedIn, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 640),
+      builder: (context , child){
+        return MaterialApp(
+          title: 'Newsly',
+          theme: NewslyThemeData.light(),
+          onGenerateRoute: AppRoutes.generateRoute,
+          initialRoute: home,
+          // initialRoute: accountInfo,
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }

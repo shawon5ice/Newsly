@@ -39,8 +39,9 @@ dependencies:
   shared_preferences:
   connectivity_plus:
   http:
-  firebase_crashlytics: ^2.8.10
+  firebase_crashlytics:
   firebase_core: ^1.22.0
+  flutter_screenutil:
 
 
   # The following adds the Cupertino Icons font to your application.

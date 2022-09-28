@@ -88,9 +88,9 @@ class SessionManager {
   // set setVerifyStatus(bool verified) => _prefManager.saveBoolean(verifyStatus, verified);
   // bool get getVerifyStatus => _prefManager.getBoolValue(verifyStatus);
   //
-  // bool? get isLoggedIn => _prefManager.getBoolValue(isLoggedInInfo);
-  // set isLoggedIn(bool? value) => _prefManager.saveBoolean(isLoggedInInfo, value ?? false);
-  //
+  bool? get isLoggedIn => _prefManager.getBoolValue(isLoggedInInfo);
+  set isLoggedIn(bool? value) => _prefManager.saveBoolean(isLoggedInInfo, value ?? false);
+
   // bool? get isGoogle => _prefManager.getBoolValue(isGoogleInfo);
   // set isGoogle(bool? value) => _prefManager.saveBoolean(isGoogleInfo, value ?? false);
   //
