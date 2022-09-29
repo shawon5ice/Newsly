@@ -14,23 +14,23 @@ class NewsRepositoryImplementation implements HomeRepository {
 
   @override
   Future<Response<NewsResponse>?> fetchNews(
-      {required Map<dynamic, dynamic> params}) async {
+      {required Map<String, String> params}) async {
     Response<NewsResponse>? _apiResponse;
     await _dioClient.get(
       path: everyThing,
-      request: params,
+      queryParameters: params,
       // header: _dioClient.getHeader(locator<SessionManager>()),
       responseCallback: (response, message) {
         try {
-          logger.printDebugLog('fetchJobs Response: $response');
+          logger.printDebugLog('fetchNews Response: $response');
           _apiResponse = Response.success(NewsResponse.fromJson(response));
         } catch (e) {
-          logger.printErrorLog("fetchJobs Response broken: $e");
+          logger.printErrorLog("fetchNews Response broken: $e");
           _apiResponse = Response.error(tryAgainErrorMessage, 500);
         }
       },
       failureCallback: (message, statusCode) {
-        logger.printErrorLog('fetchJobs Failed: $message : $statusCode');
+        logger.printErrorLog('fetchNews Failed: $message : $statusCode');
         _apiResponse = Response.error(message, statusCode);
       },
     );

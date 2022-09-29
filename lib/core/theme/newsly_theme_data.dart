@@ -4,7 +4,7 @@ import 'colors.dart';
 
 class NewslyThemeData {
 
-  static const primaryColor = Colors.white;
+  static const primaryColor = Colors.deepPurple;
   static const accentColor = Color(0XFFAA2170);
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
@@ -29,9 +29,9 @@ class NewslyThemeData {
   static AppBarTheme _appBarTheme() {
     return const AppBarTheme(
       elevation: 0,
-      color: Colors.white,
+      color: primaryColor,
       toolbarTextStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 12),
-      titleTextStyle: TextStyle(color: kTextColor),
+      titleTextStyle: TextStyle(color: Colors.white),
       iconTheme: IconThemeData(color: Colors.black),
     );
   }

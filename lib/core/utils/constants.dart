@@ -1,5 +1,6 @@
 // API
 const String baseUrl = "https://newsapi.org/v2";
+const API_KEY = "cdc25ec461e645c78591141dd745e770";
 
 // Regular expression for form validation
 const String nameRegEx = '[a-zA-Z\\s]+';

@@ -33,11 +33,11 @@ class FetchNewsFailed extends HomeState {
 }
 
 class FetchNewsSuccess extends HomeState {
-  final List<Articles> jobs;
-  final int totalJobs;
-  const FetchNewsSuccess(this.jobs,this.totalJobs);
+  final List<Articles> articles;
+  final int totalArticles;
+  const FetchNewsSuccess(this.articles,this.totalArticles);
 
   @override
-  List<Object?> get props => [jobs];
+  List<Object?> get props => [articles];
 }
 

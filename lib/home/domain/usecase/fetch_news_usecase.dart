@@ -10,7 +10,7 @@ class FetchNewsUseCase extends HomeUseCase {
 FetchNewsUseCase( dashboardRepository)
 : super(dashboardRepository);
 
-Future<Response<NewsResponse>?> fetchNews({required Map<dynamic, dynamic> params}) async {
+Future<Response<NewsResponse>?> fetchNews({required Map<String, String> params}) async {
   var response = await homeRepository.fetchNews(
     params: params,
   );
