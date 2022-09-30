@@ -18,6 +18,11 @@ class FetchNewsLoading extends HomeState {
   @override
   List<Object?> get props => [];
 }
+
+class PageChangeLoading extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
 class FirstPageLoading extends HomeState {
   @override
   List<Object?> get props => [];
@@ -36,6 +41,15 @@ class FetchNewsSuccess extends HomeState {
   final List<Articles> articles;
   final int totalArticles;
   const FetchNewsSuccess(this.articles,this.totalArticles);
+
+  @override
+  List<Object?> get props => [articles];
+}
+
+class FetchNewsStateFixedNumber extends HomeState {
+  final List<Articles> articles;
+  final int totalArticles;
+  const FetchNewsStateFixedNumber(this.articles,this.totalArticles);
 
   @override
   List<Object?> get props => [articles];

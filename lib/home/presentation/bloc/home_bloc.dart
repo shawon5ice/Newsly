@@ -13,12 +13,14 @@ import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool isLoadingMoreVisible = false;
+  var lastPage;
   List<Articles>? articles = [];
   var session = locator<SessionManager>();
 
   HomeBloc() : super(HomeInitial()) {
     var session = locator<SessionManager>();
     on<FetchNewsEvent>(_onFetchNews);
+    on<FetchNewsEventFixedNumber>(_onFetchNewsFixedPage);
   }
 
   _onFetchNews(FetchNewsEvent event, Emitter<HomeState> emit) async {
@@ -31,7 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     var response = await newsUseCase.fetchNews(params : {
       "apiKey":API_KEY,
       "q":"apple",
-      "PageNo": event.nextPageIndex.toString(),
+      "page": event.nextPageIndex.toString(),
       "pageSize":10.toString(),
     },);
 
@@ -43,6 +45,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       logger.printDebugLog(updatedList.toString());
       emit(FetchNewsSuccess(event.nextPageIndex > 1 ? updatedList : response.data!.articles!,response.data!.totalResults!));
+    } else {
+      emit(const FetchNewsFailed('No jobs found'));
+    }
+  }
+  _onFetchNewsFixedPage(FetchNewsEventFixedNumber event, Emitter<HomeState> emit) async {
+    emit(PageChangeLoading());
+    FetchNewsUseCase newsUseCase =
+    FetchNewsUseCase(locator<HomeRepository>());
+    print('Page NO: ${event.pageNo}');
+    var response = await newsUseCase.fetchNews(params : {
+      "apiKey":API_KEY,
+      "q":"apple",
+      "page": event.pageNo.toString(),
+      "pageSize":10.toString(),
+    },);
+
+    if (response!=null && response.data?.status =="ok") {
+      int totalArticles = response.data!.totalResults!;
+      lastPage = totalArticles % 10 != 0
+          ? ((totalArticles / 10) + 1).toInt()
+          : totalArticles ~/ 10;
+      emit(FetchNewsStateFixedNumber(response.data!.articles!, response.data!.totalResults!));
     } else {
       emit(const FetchNewsFailed('No jobs found'));
     }

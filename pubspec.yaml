@@ -42,6 +42,7 @@ dependencies:
   firebase_crashlytics:
   firebase_core: ^1.22.0
   flutter_screenutil:
+  number_pagination: ^0.0.3+2
 
 
   # The following adds the Cupertino Icons font to your application.

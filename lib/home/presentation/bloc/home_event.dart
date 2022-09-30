@@ -14,3 +14,10 @@ class FetchNewsEvent extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class FetchNewsEventFixedNumber extends HomeEvent {
+  final int pageNo;
+  const FetchNewsEventFixedNumber(this.pageNo);
+  @override
+  List<Object?> get props => [];
+}
