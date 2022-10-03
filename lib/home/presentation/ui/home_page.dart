@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsly/details/presentation/ui/news_details.dart';
 import 'package:newsly/home/data/model/news_response.dart';
 import 'package:newsly/home/presentation/bloc/home_bloc.dart';
 import 'package:newsly/home/presentation/bloc/home_event.dart';
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
             colorSub: Colors.white,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Align(
               alignment: Alignment.centerRight,
               child: DropdownButton<String>(
@@ -110,32 +111,39 @@ class _HomePageState extends State<HomePage> {
               return Expanded(
                   child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return Container(
-
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(color: Colors.black.withAlpha(10),offset: Offset(5,5),blurRadius: 50,)
-                      ]
-                    ),
-                    child: Row(
-                      children: [
-                        Image.network(
-                          articles[index].urlToImage.toString(),
-                          width: 100,
-                          height: 60,
-                        ),
-                        SizedBox(width: 10,),
-                        Flexible(
-                          child: Column(children: [
-                            Text(
-                              articles[index].title.toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsDetails()));
+                    },
+                    child: Card(
+                      margin: EdgeInsets.all(5),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              articles[index].urlToImage.toString().replaceAll("h_675,pg_1,q_80,w_1200", "h_80,pg_1,q_50,w_140"),
+                              width: 160,
+                              height: 80,
                             ),
-                            Text(articles[index].content!.substring(0,100).toString()+"...",
-                                style: TextStyle()),
-                          ]),
+                            SizedBox(width: 5,),
+                            Expanded(
+                              child: Column(children: [
+                                Text(
+                                  maxLines:2,
+                                  overflow: TextOverflow.ellipsis,
+                                  articles[index].title.toString(),
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                Text(articles[index].content!,
+                                    maxLines:3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle()),
+                              ]),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   );
                 },
