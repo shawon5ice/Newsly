@@ -14,6 +14,7 @@ import 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool isLoadingMoreVisible = false;
   var lastPage;
+  String sortBy = "popularity";
   List<Articles>? articles = [];
   var session = locator<SessionManager>();
 
@@ -56,16 +57,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     print('Page NO: ${event.pageNo}');
     var response = await newsUseCase.fetchNews(params : {
       "apiKey":API_KEY,
-      "q":"apple",
+      "q":"*",
       "page": event.pageNo.toString(),
       "pageSize":10.toString(),
+      "sortBy":sortBy,
     },);
 
     if (response!=null && response.data?.status =="ok") {
       int totalArticles = response.data!.totalResults!;
-      lastPage = totalArticles % 10 != 0
-          ? ((totalArticles / 10) + 1).toInt()
-          : totalArticles ~/ 10;
       emit(FetchNewsStateFixedNumber(response.data!.articles!, response.data!.totalResults!));
     } else {
       emit(const FetchNewsFailed('No jobs found'));
