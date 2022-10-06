@@ -43,6 +43,9 @@ dependencies:
   firebase_core: ^1.22.0
   flutter_screenutil:
   number_pagination: ^0.0.3+2
+  shimmer:
+  card_swiper: ^2.0.4
+  stacked_card_carousel: ^0.0.2+1
 
 
   # The following adds the Cupertino Icons font to your application.

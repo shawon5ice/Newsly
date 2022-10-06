@@ -21,3 +21,10 @@ class FetchNewsEventFixedNumber extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+class FetchTrendingNewsEvent extends HomeEvent {
+  final int nextPageIndex;
+  final List<Articles> existingList;
+  const FetchTrendingNewsEvent(this.nextPageIndex,this.existingList);
+  @override
+  List<Object?> get props => [];
+}

@@ -37,4 +37,31 @@ class NewsRepositoryImplementation implements HomeRepository {
 
     return _apiResponse;
   }
+
+
+  @override
+  Future<Response<NewsResponse>?> fetchTrendingNews(
+      {required Map<String, String> params}) async {
+    Response<NewsResponse>? _apiResponse;
+    await _dioClient.get(
+      path: topHeadlines,
+      queryParameters: params,
+      // header: _dioClient.getHeader(locator<SessionManager>()),
+      responseCallback: (response, message) {
+        try {
+          logger.printDebugLog('Trending News Response: $response');
+          _apiResponse = Response.success(NewsResponse.fromJson(response));
+        } catch (e) {
+          logger.printErrorLog("Trending News Response broken: $e");
+          _apiResponse = Response.error(tryAgainErrorMessage, 500);
+        }
+      },
+      failureCallback: (message, statusCode) {
+        logger.printErrorLog('Trending News Failed: $message : $statusCode');
+        _apiResponse = Response.error(message, statusCode);
+      },
+    );
+
+    return _apiResponse;
+  }
 }

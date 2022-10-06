@@ -29,4 +29,23 @@ Future<Response<NewsResponse>?> fetchNews({required Map<String, String> params})
   return response;
 
 }
+Future<Response<NewsResponse>?> fetchTrendingNews({required Map<String, String> params}) async {
+  var response = await homeRepository.fetchTrendingNews(
+    params: params,
+  );
+  if (response != null && response.status == Status.success) {
+    if (response.data != null &&
+        response.data?.status == "ok") {
+      response = Response.success(response.data);
+    } else {
+      response = Response.error(
+          "There is a problem!", int.parse('401'));
+    }
+  } else {
+    response = Response.error(response?.message ?? tryAgainErrorMessage, 500);
+  }
+
+  return response;
+
+}
 }
