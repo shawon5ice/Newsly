@@ -46,6 +46,7 @@ dependencies:
   shimmer:
   card_swiper: ^2.0.4
   stacked_card_carousel: ^0.0.2+1
+  google_fonts:
 
 
   # The following adds the Cupertino Icons font to your application.

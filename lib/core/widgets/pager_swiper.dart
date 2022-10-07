@@ -78,7 +78,7 @@ class PagerSwiper<T> extends StatelessWidget {
             itemWidth: 300.w,
             itemHeight: 300.h,
             itemCount: items.length,
-            layout: SwiperLayout.TINDER,
+            layout: SwiperLayout.STACK,
           ),
         ),
         isLoading
