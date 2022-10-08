@@ -64,10 +64,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         title: Text(
           "Newsly app",
           style: GoogleFonts.kaushanScript(
-              textStyle: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold)),
+            textStyle: TextStyle(
+                fontSize: 18.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),),
         ),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: Text(
                     'All News',
                     style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
                   ),
                 ),
                 Padding(
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: Text(
                     'Trending',
                     style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
                   ),
                 ),
               ],
@@ -149,67 +149,87 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: PagerSwiper<Articles>(
                   items: state.articles,
                   onHideFab: (hide) {},
-                  itemBuilder: (context, item) => Stack(
-                    children: <Widget>[
-                      Column(
+                  itemBuilder: (context, item) {
+                    final span=TextSpan(text:item.title.toString(),style: TextStyle(
+                        fontFamily: 'Avenir',
+                        fontSize: 24,
+                        color: const Color(0xff333242),
+                        fontWeight: FontWeight.w900,
+                        overflow: TextOverflow.ellipsis
+                    ),);
+                    final tp =TextPainter(text:span,maxLines: 3,textDirection: TextDirection.ltr,);
+                    tp.layout(maxWidth: 260); // equals the parent screen width
+                    double extraSpace = 0;
+                    if(tp.computeLineMetrics().length<=3){
+                      extraSpace = (3-tp.computeLineMetrics().length)*20.0;
+                    }
+                    return Stack(
                         children: <Widget>[
-                          SizedBox(height: 100),
-                          Card(
-                            elevation: 8,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(height: 100),
-                                  Text(
-                                    item.title.toString(),
-                                    style: TextStyle(
-                                      fontFamily: 'Avenir',
-                                      fontSize: 24,
-                                      color: const Color(0xff47455f),
-                                      fontWeight: FontWeight.w900,
-                                      overflow: TextOverflow.ellipsis
-                                    ),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.left,
+                          Column(
+                            children: <Widget>[
+                              SizedBox(height: 50),
+                              Card(
+                                elevation: 20,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32),
+                                ),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      SizedBox(height: 150),
+                                      Text(
+                                        item.title.toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Avenir',
+                                            fontSize: 20,
+                                            color: const Color(0xff333242),
+                                            fontWeight: FontWeight.w900,
+                                            overflow: TextOverflow.ellipsis
+                                        ),
+                                        maxLines: 3,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      SizedBox(height: 20+extraSpace,)
+                                    ],
                                   ),
-                                  SizedBox(height: 10),
-                                  // Row(
-                                  //   children: <Widget>[
-                                  //     Text(
-                                  //       'Know more',
-                                  //       style: TextStyle(
-                                  //         fontFamily: 'Avenir',
-                                  //         fontSize: 18,
-                                  //         color: Color(0xFFE4979E),
-                                  //         fontWeight: FontWeight.w500,
-                                  //       ),
-                                  //       textAlign: TextAlign.left,
-                                  //     ),
-                                  //     Icon(
-                                  //       Icons.arrow_forward,
-                                  //       color: Color(0xFFE4979E),
-                                  //     ),
-                                  //   ],
-                                  // ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Transform.translate(
+                            offset: Offset(45,-20,),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 10.0,
+                                    spreadRadius: 5.0,
+                                  )
                                 ],
+                              ),
+                              child: ClipOval(
+                                // borderRadius: BorderRadius.circular(500),
+                                child: Hero(
+                                  tag: item.publishedAt.toString(),
+                                  child: Image.network(
+                                    item.urlToImage.toString(), width: 200,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ],
-                      ),
-                      Hero(
-                        tag: item.publishedAt.toString(),
-                        child: Image.network(item.urlToImage.toString(),width: 300,height: 200,alignment: Alignment.center,),
-                      ),
-                    ],
-                  ),
+                      );
+                  },
                   isLoading: _homeBloc.isLoadingMoreVisible,
                   onNewLoad: (data, nextPage) {
                     setState(() {
@@ -273,141 +293,149 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 var articles = state.articles;
                 return Expanded(
                     child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const NewsDetails()));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 5.0,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        // if(articles[index].urlToImage!=null && !articles[index].urlToImage!.contains(".jpg") || !articles[index].urlToImage.toString().contains(".jpeg") || !articles[index].urlToImage!.contains(".png")){
+                        //   return Container();
+                        // }
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const NewsDetails()));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(10)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 5.0,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: Color(0xff80a0b5),
-                                borderRadius: BorderRadius.all(Radius.circular(50))
-                              ),
-                            ),
-                            Container(
-                              width: 50,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                  color: Color(0xff80a0b5),
-                                  borderRadius: BorderRadius.all(Radius.circular(50))
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
-                              decoration: BoxDecoration(
-                                  // color: Colors.deepOrange,
-                                  // borderRadius: BorderRadius.vertical(
-                                  //     top: Radius.circular(
-                                  //       20.0,
-                                  //     ),
-                                  //     bottom: Radius.circular(20)),
-                                  // boxShadow: [
-                                  //   BoxShadow(
-                                  //     color: Color(0xff969696),
-                                  //     offset: Offset(0.0, 1.0), //(x,y)
-                                  //     blurRadius: 4.0,
-                                  //   ),
-                                  // ],
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff80a0b5),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))
                                   ),
-                              padding: EdgeInsets.all(10),
-                              height: 120,
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(
-                                      articles[index]
-                                          .urlToImage
-                                          .toString()
-                                          .replaceAll("h_675,pg_1,q_80,w_1200",
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff80a0b5),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    // color: Colors.deepOrange,
+                                    // borderRadius: BorderRadius.vertical(
+                                    //     top: Radius.circular(
+                                    //       20.0,
+                                    //     ),
+                                    //     bottom: Radius.circular(20)),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Color(0xff969696),
+                                    //     offset: Offset(0.0, 1.0), //(x,y)
+                                    //     blurRadius: 4.0,
+                                    //   ),
+                                    // ],
+                                  ),
+                                  padding: EdgeInsets.all(10),
+                                  height: 120,
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            10.0),
+                                        child: Image.network(
+                                          articles[index]
+                                              .urlToImage
+                                              .toString()
+                                              .replaceAll(
+                                              "h_675,pg_1,q_80,w_1200",
                                               "h_100,pg_1,q_50,w_100"),
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
+                                          width: 100,
+                                          height: 100,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          articles[index].title.toString(),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
                                           children: [
-                                            Transform.rotate(
-                                              angle: 45,
-                                              child: Icon(Icons.link),
+                                            Text(
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              articles[index].title.toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 18),
                                             ),
-                                            Text(articles[index]
-                                                .publishedAt
-                                                .toString())
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Transform.rotate(
+                                                  angle: 45,
+                                                  child: Icon(Icons.link),
+                                                ),
+                                                Text(articles[index]
+                                                    .publishedAt
+                                                    .toString())
+                                              ],
+                                            )
                                           ],
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    color: Color(0xff80a0b5),
+                                    width: 10,
+                                    height: 50,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    color: Color(0xff80a0b5),
+                                    width: 50,
+                                    height: 10,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                color: Color(0xff80a0b5),
-                                width: 10,
-                                height: 50,
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                color: Color(0xff80a0b5),
-                                width: 50,
-                                height: 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: state.articles.length,
-                ));
+                          ),
+                        );
+                      },
+                      itemCount: state.articles.length,
+                    ));
               }
               return const Expanded(child: ShimmerLoaderView(true));
             }),

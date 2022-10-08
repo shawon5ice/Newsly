@@ -70,13 +70,12 @@ class PagerSwiper<T> extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Flexible(
-          flex: 1,
           child: Swiper(
             itemBuilder: (context, index) {
               return itemBuilder(context, items[index]);
             },
-            itemWidth: 300.w,
-            itemHeight: 300.h,
+            itemWidth: 250.w,
+            itemHeight: 350.h,
             itemCount: items.length,
             layout: SwiperLayout.STACK,
           ),
