@@ -1,4 +1,4 @@
-// part of 'home_bloc.dart';
+// part of 'news_details_bloc.dart';
 
 
 import 'package:equatable/equatable.dart';

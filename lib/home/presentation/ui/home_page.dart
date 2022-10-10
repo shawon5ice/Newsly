@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newsly/core/routes/route.dart';
 import 'package:newsly/core/widgets/pager_swiper.dart';
 import 'package:newsly/core/widgets/shimmer_loader_view.dart';
+import 'package:newsly/details/data/model/news_details_model.dart';
 import 'package:newsly/details/presentation/ui/news_details.dart';
 import 'package:newsly/home/data/model/news_response.dart';
 import 'package:newsly/home/presentation/bloc/home_bloc.dart';
@@ -300,10 +302,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         // }
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const NewsDetails()));
+                            Navigator.of(context).pushNamed(newsDetails,
+                                arguments: NewsDetails(
+                                  title: articles[index].title,
+                                  description: articles[index].description,
+                                  author: articles[index].author,
+                                  publishedAt: articles[index].publishedAt,
+                                  url: articles[index].url,
+                                  urlToImage: articles[index].urlToImage,
+                                  sourceName: articles[index].source!.name,
+                                  content: articles[index].content
+                                ));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10),

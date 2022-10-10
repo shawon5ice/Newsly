@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:newsly/home/data/model/news_response.dart';
 
-// part 'home_bloc.dart';
+// part 'news_details_bloc.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();

@@ -1,9 +1,9 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:newsly/home/data/model/news_response.dart';
-// import 'package:newsly/home/presentation/bloc/home_bloc.dart';
-// import 'package:newsly/home/presentation/bloc/home_event.dart';
-// import 'package:newsly/home/presentation/bloc/home_state.dart';
+// import 'package:newsly/home/data/model/news_details_model.dart';
+// import 'package:newsly/home/presentation/bloc/news_details_bloc.dart';
+// import 'package:newsly/home/presentation/bloc/news_details_event.dart';
+// import 'package:newsly/home/presentation/bloc/news_details_state.dart';
 // import 'package:number_pagination/number_pagination.dart';
 //
 // import '../../../core/widgets/pager_list_view.dart';

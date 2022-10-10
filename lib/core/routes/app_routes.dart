@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsly/core/routes/route.dart';
+import 'package:newsly/details/presentation/bloc/news_details_bloc.dart';
+import 'package:newsly/details/presentation/ui/news_details.dart';
 import 'package:newsly/home/presentation/ui/home_page.dart';
 import '../../home/presentation/bloc/home_bloc.dart';
 
@@ -17,6 +19,18 @@ class AppRoutes {
                 ),
               ], child: const HomePage());
             },
+          );
+        }
+      case newsDetails:
+        {
+          return MaterialPageRoute(
+            builder: (_) {
+              return BlocProvider(
+                create: (context) => NewsDetailsBloc(),
+                child: const NewsDetailsPage(),
+              );
+            },
+            settings: routeSettings,
           );
         }
       default:
