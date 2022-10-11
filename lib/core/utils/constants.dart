@@ -54,3 +54,8 @@ const String methodTradeLicense = "Tr";
 const String methodTin = "Tn";
 const String methodNid = "n";
 const String methodOther = "o";
+
+
+//Assets
+const String bookMarkNotDone = "assets/icons/bookmark_not_done.svg";
+const String bookMarkDone = "assets/icons/bookmark_done.svg";

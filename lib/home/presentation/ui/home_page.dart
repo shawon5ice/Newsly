@@ -373,15 +373,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(
                                             10.0),
-                                        child: Image.network(
-                                          articles[index]
-                                              .urlToImage
-                                              .toString()
-                                              .replaceAll(
-                                              "h_675,pg_1,q_80,w_1200",
-                                              "h_100,pg_1,q_50,w_100"),
-                                          width: 100,
-                                          height: 100,
+                                        child: Hero(
+                                          tag: articles[index]
+                                              .urlToImage.toString(),
+                                          child: Image.network(
+                                            articles[index]
+                                                .urlToImage
+                                                .toString()
+                                                .replaceAll(
+                                                "h_675,pg_1,q_80,w_1200",
+                                                "h_100,pg_1,q_50,w_100"),
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(
