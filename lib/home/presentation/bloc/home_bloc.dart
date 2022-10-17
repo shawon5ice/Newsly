@@ -66,6 +66,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (response!=null && response.data?.status =="ok") {
       int totalArticles = response.data!.totalResults!;
+      articles = response.data!.articles!;
       emit(FetchNewsStateFixedNumber(response.data!.articles!, response.data!.totalResults!));
     } else {
       emit(const FetchNewsFailed('No jobs found'));
@@ -78,12 +79,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // emit(TrendingNewsLoading());
     FetchNewsUseCase newsUseCase =
     FetchNewsUseCase(locator<HomeRepository>());
-    var response = await newsUseCase.fetchNews(params : {
+    var response = await newsUseCase.fetchTrendingNews(params : {
       "apiKey":API_KEY,
-      "q":"*",
-      "page": event.nextPageIndex.toString(),
-      "pageSize":10.toString(),
-      "sortBy":sortBy,
+      // "page": event.nextPageIndex.toString(),
+      // "pageSize":10.toString(),
+      // "sortBy":sortBy,
+      "country":"us"
     },);
 
     isLoadingMoreVisible = false;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsly/core/routes/route.dart';
+import 'package:newsly/core/widgets/navigation_drawer.dart';
 import 'package:newsly/core/widgets/pager_swiper.dart';
 import 'package:newsly/core/widgets/shimmer_loader_view.dart';
 import 'package:newsly/details/data/model/news_details_model.dart';
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late HomeBloc _homeBloc;
   var currentPage = 1;
   var lastPage = 3;
-  String dropDownValue = 'popularity';
+  String dropDownValue = 'publishedAt';
   int? selectedTabIndex = 0;
   ScrollPhysics scrollPhysicsSetting = const ClampingScrollPhysics();
 
@@ -40,7 +41,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _homeBloc = BlocProvider.of<HomeBloc>(context);
-    _homeBloc.add(const FetchNewsEventFixedNumber(1));
+    if(_homeBloc.articles!.isEmpty){
+      _homeBloc.add(const FetchNewsEventFixedNumber(1));
+    }
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
     _homeBloc.stream.listen((state) {});
@@ -57,9 +60,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     var selectedPageNumber = 1;
     return Scaffold(
       backgroundColor: Color(0xffd0d1dc),
-      drawer: Drawer(
-        backgroundColor: Color(0xffd0d1dc),
-      ),
+      drawer: NavigationDrawer(),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -223,7 +224,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     item.urlToImage.toString(), width: 200,
                                     height: 200,
                                     fit: BoxFit.cover,
-
+                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                        return Text('Opps!!!');
+                                      }
                                   ),
                                 ),
                               ),
@@ -292,7 +295,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 if (!(lastPage <= 100)) {
                   lastPage = 100;
                 }
-                var articles = state.articles;
+                var articles = _homeBloc.articles as List<Articles>;
                 return Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -377,6 +380,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           tag: articles[index]
                                               .urlToImage.toString(),
                                           child: Image.network(
+                                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                              return Text('Opps!!!');
+                                            },
                                             articles[index]
                                                 .urlToImage
                                                 .toString()

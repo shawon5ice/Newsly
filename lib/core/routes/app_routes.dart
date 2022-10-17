@@ -4,6 +4,7 @@ import 'package:newsly/core/routes/route.dart';
 import 'package:newsly/details/presentation/bloc/news_details_bloc.dart';
 import 'package:newsly/details/presentation/ui/news_details.dart';
 import 'package:newsly/home/presentation/ui/home_page.dart';
+import '../../bookmark/presentation/ui/bookmark_page.dart';
 import '../../home/presentation/bloc/home_bloc.dart';
 
 class AppRoutes {
@@ -28,6 +29,18 @@ class AppRoutes {
               return BlocProvider(
                 create: (context) => NewsDetailsBloc(),
                 child: const NewsDetailsPage(),
+              );
+            },
+            settings: routeSettings,
+          );
+        }
+        case bookmarkPage:
+        {
+          return MaterialPageRoute(
+            builder: (_) {
+              return BlocProvider(
+                create: (context) => NewsDetailsBloc(),
+                child: const BookMarkPage(),
               );
             },
             settings: routeSettings,
