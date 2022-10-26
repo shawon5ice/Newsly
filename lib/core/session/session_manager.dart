@@ -91,6 +91,9 @@ class SessionManager {
   bool? get isLoggedIn => _prefManager.getBoolValue(isLoggedInInfo);
   set isLoggedIn(bool? value) => _prefManager.saveBoolean(isLoggedInInfo, value ?? false);
 
+  bool get darkTheme => _prefManager.getBoolValue(darkThemeOn);
+  set darkTheme(bool value) => _prefManager.saveBoolean(darkThemeOn, value);
+
   // bool? get isGoogle => _prefManager.getBoolValue(isGoogleInfo);
   // set isGoogle(bool? value) => _prefManager.saveBoolean(isGoogleInfo, value ?? false);
   //

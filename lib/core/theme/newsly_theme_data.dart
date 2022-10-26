@@ -9,7 +9,8 @@ class NewslyThemeData {
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
   static const iconColor = Color(0XFF666666);
-  static const background = Color(0XFFE5E5E5);
+  static const background = Color(0XFF1a1c1e);
+  static const borderCornerColor = Colors.deepPurple;
 
   static ThemeData light() {
     final textTheme = _textTheme();
@@ -47,9 +48,10 @@ class NewslyThemeData {
   static ThemeData dark() {
     final textTheme = _textTheme();
 
+
     return ThemeData(
       brightness: Brightness.dark,
-      primaryColor: primaryColor,
+      primaryColor: Colors.black,
       textTheme: textTheme,
       inputDecorationTheme: inputDecorationTheme(),
       primaryTextTheme: textTheme,

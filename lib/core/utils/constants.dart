@@ -30,6 +30,7 @@ const String currentCompanyInfo = "current-company-info";
 const String verifyRequestStatus = "verify-request-status";
 const String verifyStatus = "verify-status";
 const String isLoggedInInfo = "is-logged-in";
+const String darkThemeOn = "dark-theme";
 const String isGoogleInfo = "is-google";
 const String GoogleID = "google-ID";
 
