@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:newsly/core/theme/newsly_theme_data.dart';
 
 import '../di/app_component.dart';
 import '../routes/route.dart';
@@ -57,7 +58,7 @@ class NavigationDrawer extends StatelessWidget {
                           .brightness;
                   ThemeSwitcher.of(context).changeTheme(
                       theme: brightness == Brightness.light?
-                      ThemeData.dark():ThemeData.light());
+                      NewslyThemeData.dark():NewslyThemeData.light());
                   switchValue = !switchValue;
                   session.darkTheme = switchValue;
                 },

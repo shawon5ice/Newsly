@@ -86,13 +86,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0.r),
                 border: Border.all(
-                  color: Colors.blueGrey,
+                  color: NewslyThemeData.primaryColor,
                 ),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: Colors.blueGrey,
+                  color: NewslyThemeData.primaryColor,
                   borderRadius: BorderRadius.circular(6.0.r),
                 ),
                 unselectedLabelColor: Colors.black,
@@ -102,16 +102,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     padding: EdgeInsets.only(top: 2.h),
                     child: Text(
                       'All News',
-                      style:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      style: GoogleFonts.raleway(
+                      textStyle: TextStyle(
+                      fontSize: 12.sp,
+                          fontWeight: FontWeight.bold),
+                      ),
+                      ),
                     ),
-                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 2.h),
                     child: Text(
                       'Trending',
-                      style:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      style: GoogleFonts.raleway(
+                        textStyle: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],

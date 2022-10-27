@@ -50,6 +50,7 @@ class NewslyThemeData {
 
 
     return ThemeData(
+      appBarTheme: _appBarTheme(),
       brightness: Brightness.dark,
       primaryColor: Colors.black,
       textTheme: textTheme,
