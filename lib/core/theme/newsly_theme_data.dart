@@ -37,6 +37,16 @@ class NewslyThemeData {
     );
   }
 
+  static AppBarTheme _appBarThemeDark() {
+    return const AppBarTheme(
+      elevation: 0,
+      color: Colors.transparent,
+      toolbarTextStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),
+      titleTextStyle: TextStyle(color: Colors.white),
+      iconTheme: IconThemeData(color: Colors.white),
+    );
+  }
+
   static TextTheme _textTheme() {
     return const TextTheme(
       headline5: TextStyle(color: kTextColor, fontFamily: "Roboto", fontWeight: FontWeight.bold, fontSize: 16,),
@@ -45,12 +55,20 @@ class NewslyThemeData {
     );
   }
 
+  static TextTheme _textThemeDark() {
+    return const TextTheme(
+      headline5: TextStyle(color: kTextColorDark, fontFamily: "Roboto", fontWeight: FontWeight.bold, fontSize: 16,),
+      bodyText1: TextStyle(color: kTextColorDark, fontFamily: "Roboto", fontSize: 14,),
+      bodyText2: TextStyle(color: kTextColorDark, fontFamily: "Roboto", fontSize: 16,),
+    );
+  }
+
   static ThemeData dark() {
-    final textTheme = _textTheme();
+    final textTheme = _textThemeDark();
 
 
     return ThemeData(
-      appBarTheme: _appBarTheme(),
+      appBarTheme: _appBarThemeDark(),
       brightness: Brightness.dark,
       primaryColor: Colors.black,
       textTheme: textTheme,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:newsly/home/presentation/bloc/home_event.dart';
 import 'package:newsly/home/presentation/bloc/home_state.dart';
 import 'package:number_pagination/number_pagination.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -184,7 +187,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 url: item.url,
                                 urlToImage: item.urlToImage,
                                 sourceName: item.source!.name,
-                                content: item.content
+                                content: item.content,
                             ));
                       },
                       child: Stack(

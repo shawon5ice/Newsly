@@ -9,16 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:json_theme/json_theme.dart';
+import 'package:newsly/core/service/bookmark/bookmark.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
 
 import 'core/di/app_component.dart';
 import 'core/routes/app_routes.dart';
 import 'core/routes/route.dart';
 import 'core/session/session_manager.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   await Firebase.initializeApp();
+  Hive.registerAdapter(BookmarkAdapter());
+  await Hive.openBox<Bookmark>('bookmarks');
   // Pass all uncaught errors from the framework to Crashlytics.
   // final themeStr = await rootBundle.loadString('assets/theme/app_theme.json');
   // final themeJson = jsonDecode(themeStr);
