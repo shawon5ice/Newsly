@@ -1,14 +1,14 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:newsly/core/service/bookmark/bookmark.dart';
-import 'package:newsly/core/service/hive_boxes.dart';
+import 'package:newsly/core/logger/logger.dart';
 import 'package:newsly/core/utils/constants.dart';
 import 'package:newsly/details/data/model/news_details_model.dart';
-import 'package:newsly/home/data/model/news_response.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../../core/service/bookmark/bookmark.dart';
+import '../../../core/service/hive_boxes.dart';
 
 class NewsDetailsPage extends StatefulWidget {
   const NewsDetailsPage({Key? key}) : super(key: key);
@@ -18,35 +18,42 @@ class NewsDetailsPage extends StatefulWidget {
 }
 
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
-  late String image;
-  late String title;
-  late String author;
-  late String publishedAt;
-  late String description;
   late NewsDetails news;
+  late Bookmark bookmark;
+  final box = Boxes.getBookmarks();
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
     news = ModalRoute.of(context)!.settings.arguments as NewsDetails;
-    image = news.urlToImage.toString();
-    author = news.author.toString();
-    title = news.title.toString();
-    description = news.description.toString();
-    publishedAt = news.publishedAt.toString();
+
+    bookmark = Bookmark()
+      ..source = news.source.toString()
+      ..author = news.author.toString()
+      ..url = news.url.toString()
+      ..publishedAt = news.publishedAt.toString()
+      ..content = news.content.toString()
+      ..urlToImage = news.urlToImage.toString()
+      ..title = news.title.toString()
+      ..description = news.description.toString();
+
+
+    var _bookmarkCheck = box.values.where((element) => news.publishedAt==element.publishedAt).isNotEmpty;
+
+      if(_bookmarkCheck){
+        isBookmarked = true;
+        logger.printDebugLog("true");
+      }
+    super.didChangeDependencies();
   }
 
   final GlobalKey webViewKey = GlobalKey();
-
+  bool isBookmarked = false;
   String url = "";
   double progress = 0;
   final urlController = TextEditingController();
 
   @override
   void initState() {
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
     super.initState();
   }
 
@@ -59,7 +66,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('By $author'),
+        title: Text('By ${news.author}'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -71,7 +78,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      title,
+                      news.title.toString(),
                       textAlign: TextAlign.justify,
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
@@ -84,8 +91,10 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                     FaIcon(FontAwesomeIcons.clock),
                     SizedBox(width: 10),
                     Text(
-                        "${DateFormat.yMMMd().format(DateTime.parse(publishedAt))} At ${DateFormat('hh:mm a')
-                                .format(DateTime.parse(publishedAt))}")
+                        DateFormat.yMMMd().format(DateTime.parse(news.publishedAt.toString())) +
+                            " At " +
+                            DateFormat('hh:mm a')
+                                .format(DateTime.parse(news.publishedAt.toString())))
                   ],
                 ),
                 SizedBox(
@@ -94,7 +103,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                 Stack(
                   children: [
                     Hero(
-                      tag: image,
+                      tag: news.urlToImage.toString(),
                       child: Image.network(
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent? loadingProgress) {
@@ -103,8 +112,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                             height: 300,
                             child: Center(
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
+                                value: loadingProgress.expectedTotalBytes != null
                                     ? loadingProgress.cumulativeBytesLoaded /
                                         loadingProgress.expectedTotalBytes!
                                     : null,
@@ -112,7 +120,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                             ),
                           );
                         },
-                        image,
+                        news.urlToImage.toString(),
                         height: 300,
                         fit: BoxFit.cover,
                       ),
@@ -124,10 +132,21 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              addBookMark(news);
+                              if(isBookmarked){
+                                isBookmarked = false;
+                                var _task = box.values.where((element) => news.publishedAt==element.publishedAt).first;
+                                _task.delete();
+                              }else{
+                                box.add(bookmark);
+                                logger.printDebugLog("Bookmarked...");
+                                isBookmarked = true;
+                              }
+                              setState(() {
+
+                              });
                             },
                             child: Card(
-                              color: Colors.black,
+                              color: isBookmarked?Colors.green:Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50)),
                               child: Padding(
@@ -140,18 +159,16 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              box.clear();
+                            },
                             child: Card(
                               color: Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50)),
-                              child: const Padding(
+                              child: Padding(
                                 padding: EdgeInsets.all(10),
-                                child: FaIcon(
-                                  FontAwesomeIcons.share,
-                                  size: 40,
-                                  color: Color(0xff80a0b5),
-                                ),
+                                child: FaIcon(FontAwesomeIcons.share,size: 40,color: Color(0xff80a0b5),),
                               ),
                             ),
                           ),
@@ -160,34 +177,25 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                     )
                   ],
                 ),
-                Container(
-                  height: 400,
-                  child: WebView(
-                    initialUrl: url,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                ])
+    )
+    )));
   }
-
-  addBookMark(NewsDetails article){
+  addBookmark(NewsDetails news){
     final bookmark = Bookmark()
-      ..source = article.source.toString()
-      ..author = article.author.toString()
-      ..title = article.title.toString()
-      ..description = article.description.toString()
-      ..url = article.url.toString()
-      ..urlToImage = article.urlToImage.toString()
-      ..publishedAt = article.publishedAt.toString()
-      ..content = article.content.toString();
+      ..source = news.source.toString()
+      ..author = news.author.toString()
+      ..url = news.url.toString()
+      ..publishedAt = news.publishedAt.toString()
+      ..content = news.content.toString()
+      ..urlToImage = news.urlToImage.toString()
+      ..title = news.title.toString()
+      ..description = news.description.toString();
 
-    final box = Boxes.getBookmarks();
-    print("Bookmarked");
     box.add(bookmark);
-
+    logger.printDebugLog("Bookmarked...");
+  }
+  void deleteBookMark(Bookmark bookmark) {
+    bookmark.delete();
   }
 }
