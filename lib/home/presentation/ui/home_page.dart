@@ -46,17 +46,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _homeBloc = BlocProvider.of<HomeBloc>(context);
-    if(_homeBloc.articles!.isEmpty){
-      _homeBloc.add(const FetchNewsEventFixedNumber(1));
-    }
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
-    _homeBloc.stream.listen((state) {});
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    if(_homeBloc.articles!.isEmpty){
+      _homeBloc.add(const FetchNewsEventFixedNumber(1));
+    }
     super.didChangeDependencies();
   }
 
@@ -65,18 +64,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     var selectedPageNumber = 1;
     return ThemeSwitchingArea(
       child: Scaffold(
-        drawer: NavigationDrawer(),
+        drawer: NavDraw(),
         appBar: AppBar(
           elevation: 0,
           title: Text(
-            "Newsly app",
+            "Newsly",
             style: GoogleFonts.kaushanScript(
               textStyle: TextStyle(
                   fontSize: 18.sp,
-                  fontWeight: FontWeight.bold),),
+                  color: NewslyThemeData.primaryColor,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
+            IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search))
           ],
         ),
         body: Padding(
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   color: NewslyThemeData.primaryColor,
                   borderRadius: BorderRadius.circular(6.0.r),
                 ),
-                unselectedLabelColor: Colors.black,
+                unselectedLabelColor: NewslyThemeData.primaryColor,
                 labelColor: Colors.white,
                 tabs: [
                   Padding(
@@ -194,26 +195,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                SizedBox(height: 50),
+                                const SizedBox(height: 50),
                                 Card(
                                   elevation: 20,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(32),
                                   ),
-                                  color: NewslyThemeData.background,
+                                  color: NewslyThemeData.primaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(20.0),
                                     child: Column(
                                       crossAxisAlignment:
                                       CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        SizedBox(height: 150),
+                                        const SizedBox(height: 150),
                                         Text(
                                           item.title.toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontFamily: 'Avenir',
                                               fontSize: 20,
-                                              color: const Color(0xff333242),
+                                              color: Color(0xff333242),
                                               fontWeight: FontWeight.w900,
                                               overflow: TextOverflow.ellipsis
                                           ),
@@ -228,9 +229,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ],
                             ),
                             Transform.translate(
-                              offset: Offset(45,-20,),
+                              offset: const Offset(45,-20,),
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   // boxShadow: [
                                   //   BoxShadow(
@@ -249,7 +250,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       height: 200,
                                       fit: BoxFit.cover,
                                         errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                          return Text('Opps!!!');
+                                          return const Text('Opps!!!');
                                         }
                                     ),
                                   ),
@@ -346,146 +347,133 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       content: articles[index].content
                                   ));
                             },
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10)),
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: Colors.grey,
-                                //     offset: Offset(0.0, 1.0), //(x,y)
-                                //     blurRadius: 5.0,
-                                //   ),
-                                // ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: 10,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 50,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      // color: Colors.deepOrange,
-                                      // borderRadius: BorderRadius.vertical(
-                                      //     top: Radius.circular(
-                                      //       20.0,
-                                      //     ),
-                                      //     bottom: Radius.circular(20)),
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //     color: Color(0xff969696),
-                                      //     offset: Offset(0.0, 1.0), //(x,y)
-                                      //     blurRadius: 4.0,
-                                      //   ),
-                                      // ],
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    height: 120,
-                                    child: Row(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                          child: Hero(
-                                            tag: articles[index]
-                                                .urlToImage.toString(),
-                                            child: Image.network(
-                                              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                                return Text('Opps!!!');
-                                              },
-                                              articles[index]
-                                                  .urlToImage
-                                                  .toString()
-                                                  .replaceAll(
-                                                  "h_675,pg_1,q_80,w_1200",
-                                                  "h_100,pg_1,q_50,w_100"),
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                articles[index].title.toString(),
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Transform.rotate(
-                                                    angle: 45,
-                                                    child: Icon(Icons.link),
-                                                  ),
-                                                  Text(articles[index]
-                                                      .publishedAt
-                                                      .toString())
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: NewslyThemeData.borderCornerColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50))
-                                      ),
+                            child: Card(
+                              elevation: 10,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10)),
+                                  // boxShadow: [
+                                  //   BoxShadow(
+                                  //     color: Colors.grey,
+                                  //     offset: Offset(0.0, 1.0), //(x,y)
+                                  //     blurRadius: 5.0,
+                                  //   ),
+                                  // ],
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Container(
                                       width: 10,
                                       height: 50,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: NewslyThemeData.borderCornerColor,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(50))
                                       ),
+                                    ),
+                                    Container(
                                       width: 50,
                                       height: 10,
+                                      decoration: const BoxDecoration(
+                                          color: NewslyThemeData.borderCornerColor,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 5),
+                                      padding: const EdgeInsets.all(10),
+                                      height: 120,
+                                      child: Row(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                            child: Hero(
+                                              tag: articles[index]
+                                                  .urlToImage.toString(),
+                                              child: Image.network(
+                                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                                  return const Text('Opps!!!');
+                                                },
+                                                articles[index]
+                                                    .urlToImage
+                                                    .toString()
+                                                    .replaceAll(
+                                                    "h_675,pg_1,q_80,w_1200",
+                                                    "h_100,pg_1,q_50,w_100"),
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  articles[index].title.toString(),
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 18),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Transform.rotate(
+                                                      angle: 45,
+                                                      child: Icon(Icons.link),
+                                                    ),
+                                                    Text(articles[index]
+                                                        .publishedAt
+                                                        .toString())
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: NewslyThemeData.borderCornerColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))
+                                        ),
+                                        width: 10,
+                                        height: 50,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: NewslyThemeData.borderCornerColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))
+                                        ),
+                                        width: 50,
+                                        height: 10,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );

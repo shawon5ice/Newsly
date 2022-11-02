@@ -94,6 +94,9 @@ class SessionManager {
   bool get darkTheme => _prefManager.getBoolValue(darkThemeOn);
   set darkTheme(bool value) => _prefManager.saveBoolean(darkThemeOn, value);
 
+  int? get drawerIndex => _prefManager.getIntValue(selectedIndex);
+  set drawerIndex(int? value) => _prefManager.saveInt(selectedIndex, value);
+
   // bool? get isGoogle => _prefManager.getBoolValue(isGoogleInfo);
   // set isGoogle(bool? value) => _prefManager.saveBoolean(isGoogleInfo, value ?? false);
   //

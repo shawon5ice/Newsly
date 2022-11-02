@@ -4,13 +4,13 @@ import 'colors.dart';
 
 class NewslyThemeData {
 
-  static const primaryColor = Colors.deepPurple;
+  static const primaryColor = Color(0xfff3b949);
   static const accentColor = Color(0XFFAA2170);
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
   static const iconColor = Color(0XFF666666);
   static const background = Color(0XFF1a1c1e);
-  static const borderCornerColor = Colors.deepPurple;
+  static const borderCornerColor = Color(0xfff3b949);
 
   static ThemeData light() {
     final textTheme = _textTheme();
@@ -30,9 +30,9 @@ class NewslyThemeData {
   static AppBarTheme _appBarTheme() {
     return const AppBarTheme(
       elevation: 0,
-      color: primaryColor,
+      color: Colors.transparent,
       toolbarTextStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 12),
-      titleTextStyle: TextStyle(color: Colors.white),
+      titleTextStyle: TextStyle(color: kTextColor),
       iconTheme: IconThemeData(color: Colors.black),
     );
   }
@@ -65,7 +65,6 @@ class NewslyThemeData {
 
   static ThemeData dark() {
     final textTheme = _textThemeDark();
-
 
     return ThemeData(
       appBarTheme: _appBarThemeDark(),

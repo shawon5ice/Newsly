@@ -7,18 +7,13 @@ import '../../../core/service/hive_boxes.dart';
 import '../../../core/theme/newsly_theme_data.dart';
 import '../../../details/data/model/news_details_model.dart';
 
-class BookMarkPage extends StatefulWidget {
+class BookMarkPage extends StatelessWidget {
   const BookMarkPage({Key? key}) : super(key: key);
 
   @override
-  State<BookMarkPage> createState() => _BookMarkPageState();
-}
-
-class _BookMarkPageState extends State<BookMarkPage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawer(),
+      drawer: NavDraw(),
       appBar: AppBar(title: const Text('Bookmarks'),),
       body: ValueListenableBuilder<Box<Bookmark>>(
         valueListenable: Boxes.getBookmarks().listenable(),
@@ -58,6 +53,7 @@ class _BookMarkPageState extends State<BookMarkPage> {
       );
     }
   }
+
   Widget buildBookmark(
       BuildContext context,
       Bookmark bookmark,

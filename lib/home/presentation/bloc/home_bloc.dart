@@ -14,8 +14,9 @@ import 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool isLoadingMoreVisible = false;
   var lastPage;
-  String sortBy = "popularity";
+  String sortBy = "publishedAt";
   List<Articles>? articles = [];
+  List<Articles>? trandingArticles = [];
   var session = locator<SessionManager>();
 
   HomeBloc() : super(HomeInitial()) {
@@ -99,7 +100,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       logger.printDebugLog(updatedList.toString());
       emit(FetchTrendingNewsStateSuccess(event.nextPageIndex > 1 ? updatedList : response.data!.articles!,totalPage,response.data!.totalResults!));
     } else {
-      emit(const FetchNewsFailed('No jobs found'));
+      emit(const FetchNewsFailed('No News found'));
     }
   }
 }
