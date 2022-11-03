@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:newsly/core/service/bookmark/bookmark.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
+import 'package:newsly/firebase_options.dart';
 
 import 'core/di/app_component.dart';
 import 'core/routes/app_routes.dart';
@@ -22,17 +23,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+  // Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Hive.registerAdapter(BookmarkAdapter());
   await Hive.openBox<Bookmark>('bookmarks');
   // Pass all uncaught errors from the framework to Crashlytics.
   // final themeStr = await rootBundle.loadString('assets/theme/app_theme.json');
   // final themeJson = jsonDecode(themeStr);
   // final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  if(kDebugMode){
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // if(kDebugMode){
+  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  // }
 
   await AppComponent().init();
   locator.isReady<SessionManager>().then((value) {
