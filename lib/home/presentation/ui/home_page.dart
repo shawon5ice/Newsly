@@ -16,9 +16,11 @@ import 'package:newsly/home/data/model/news_response.dart';
 import 'package:newsly/home/presentation/bloc/home_bloc.dart';
 import 'package:newsly/home/presentation/bloc/home_event.dart';
 import 'package:newsly/home/presentation/bloc/home_state.dart';
-import 'package:newsly/search/search_page.dart';
+import 'package:newsly/search/presentation/bloc/search_bloc.dart';
+import 'package:newsly/search/presentation/ui/search_page.dart';
 import 'package:number_pagination/number_pagination.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,6 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     var selectedPageNumber = 1;
     return ThemeSwitchingArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         drawer: NavDraw(),
         appBar: AppBar(
           elevation: 0,
@@ -80,53 +83,61 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPage()));
+                  Navigator.push(context,
+                      PageTransition(child: BlocProvider(
+                    create: (context) => SearchBloc(),
+                    child: const SearchPage(),
+                  ), type: PageTransitionType.rightToLeft));
                 }, icon: const Icon(CupertinoIcons.search))
           ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(children: [
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              width: double.infinity,
-              height: 36,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0.r),
-                border: Border.all(
-                  color: NewslyThemeData.primaryColor,
+          child: Column(
+              children: [
+            Flexible(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.only(top: 10),
+                width: double.infinity,
+                height: 36,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0.r),
+                  border: Border.all(
+                    color: NewslyThemeData.primaryColor,
+                  ),
                 ),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                  color: NewslyThemeData.primaryColor,
-                  borderRadius: BorderRadius.circular(6.0.r),
-                ),
-                unselectedLabelColor: NewslyThemeData.primaryColor,
-                labelColor: Colors.white,
-                tabs: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 2),
-                    child: Text(
-                      'All News',
-                      style: GoogleFonts.raleway(
-                        textStyle: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: BoxDecoration(
+                    color: NewslyThemeData.primaryColor,
+                    borderRadius: BorderRadius.circular(6.0.r),
+                  ),
+                  unselectedLabelColor: NewslyThemeData.primaryColor,
+                  labelColor: Colors.white,
+                  tabs: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: Text(
+                        'All News',
+                        style: GoogleFonts.raleway(
+                          textStyle: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 2),
-                    child: Text(
-                      'Trending',
-                      style: GoogleFonts.raleway(
-                        textStyle: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: Text(
+                        'Trending',
+                        style: GoogleFonts.raleway(
+                          textStyle: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -368,13 +379,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
-                              // boxShadow: [
-                              //   BoxShadow(
-                              //     color: Colors.grey,
-                              //     offset: Offset(0.0, 1.0), //(x,y)
-                              //     blurRadius: 5.0,
-                              //   ),
-                              // ],
                             ),
                             child: Stack(
                               children: [

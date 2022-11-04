@@ -61,3 +61,17 @@ const String methodOther = "o";
 //Assets
 const String bookMarkNotDone = "assets/icons/bookmark_not_done.svg";
 const String bookMarkDone = "assets/icons/bookmark_done.svg";
+
+const SearchItems = [
+  "Apple",
+  "Flutter",
+  "Tesla",
+  "Election",
+  "Economy",
+  "Internet",
+  "Innovation",
+  "Web 3.0",
+  "Cars",
+  "Lifestyle",
+  "Health",
+];
