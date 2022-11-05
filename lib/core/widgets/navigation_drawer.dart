@@ -112,22 +112,28 @@ class _NavDrawState extends State<NavDraw> {
               text: 'Home',
               isSelected: selectedIndex == 0,
               onTap: () {
+                if(selectedIndex != 0){
+                  Navigator.pushNamed(context, home);
+                }else{
+                  Navigator.pop(context);
+                }
                 setState(() {
                   selectedIndex = 0;
                 });
-
-                Navigator.pushReplacementNamed(context, home);
               }),
           _createDrawerItem(
               icon: Icons.bookmark_outline,
               text: 'Bookmarks',
               isSelected: selectedIndex == 1,
               onTap: () {
+                if(selectedIndex != 1){
+                  Navigator.pushNamed(context, bookmarkPage);
+                }else{
+                  Navigator.pop(context);
+                }
                 setState(() {
                   selectedIndex = 1;
                 });
-
-                Navigator.pushReplacementNamed(context, bookmarkPage);
               }),
           ListTile(
             leading: Icon(Icons.nightlight_round),

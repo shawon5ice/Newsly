@@ -26,4 +26,7 @@ class Bookmark extends HiveObject{
 
   @HiveField(7)
   late String content;
+
+  @HiveField(8)
+  late String timeStamp;
 }

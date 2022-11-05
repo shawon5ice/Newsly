@@ -4,13 +4,13 @@ import 'colors.dart';
 
 class NewslyThemeData {
 
-  static const primaryColor = Color(0xfff3b949);
+  static const primaryColor = Color(0xff90CAF9);
   static const accentColor = Color(0XFFAA2170);
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
   static const iconColor = Color(0XFF666666);
   static const background = Color(0XFF1a1c1e);
-  static const borderCornerColor = Color(0xfff3b949);
+  static const borderCornerColor = Color(0xff90CAF9);
 
   static ThemeData light() {
     final textTheme = _textTheme();

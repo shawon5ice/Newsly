@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newsly/core/service/bookmark/bookmark.dart';
 import 'package:newsly/core/widgets/navigation_drawer.dart';
@@ -18,9 +19,11 @@ class BookMarkPage extends StatelessWidget {
       body: ValueListenableBuilder<Box<Bookmark>>(
         valueListenable: Boxes.getBookmarks().listenable(),
         builder: (context, box, _) {
-          final bookmarks = box.values.toList().cast<Bookmark>();
+          var items = box.values.toList();
+          items.sort((a, b) => b.timeStamp.compareTo(a.timeStamp));
+          // final bookmarks = box.values.where((element) => element.timeStamp.compareTo(other))
 
-          return buildContent(bookmarks);
+          return buildContent(items);
         },
       ),
     );
@@ -28,16 +31,17 @@ class BookMarkPage extends StatelessWidget {
 
   Widget buildContent(List<Bookmark> bookmarks) {
     if (bookmarks.isEmpty) {
-      return const Center(
-        child: Text(
-          'No Bookmarks yet!',
-          style: TextStyle(fontSize: 24),
+      return Center(
+        child: Column(
+          children: [
+            SvgPicture.asset('assets/svg/no_bookmark.svg'),
+            Text('Your bookmarks will appear here'),
+          ],
         ),
       );
     } else {
       return Column(
         children: [
-          const SizedBox(height: 24),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(8),

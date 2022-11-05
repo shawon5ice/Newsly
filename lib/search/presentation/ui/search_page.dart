@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
 import 'package:newsly/core/utils/constants.dart';
 import 'package:newsly/search/presentation/bloc/search_bloc.dart';
 import 'package:newsly/search/presentation/bloc/search_event.dart';
 import 'package:newsly/search/presentation/bloc/search_state.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/routes/route.dart';
 import '../../../core/widgets/shimmer_loader_view.dart';
@@ -53,12 +55,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -105,11 +107,14 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                showSuggestions
-                    ? Wrap(
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              showSuggestions
+                  ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Wrap(
                         spacing: 10,
                         children: SearchItems.map(
                           (item) => InkWell(
@@ -126,11 +131,11 @@ class _SearchPageState extends State<SearchPage> {
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Text(item)),
                           ),
-                        ).toList())
-                    : SizedBox(),
-                    _allNews(),
-              ],
-            ),
+                        ).toList()),
+                  )
+                  : SizedBox(),
+                  _allNews(),
+            ],
           ),
         ),
       ),
@@ -139,7 +144,7 @@ class _SearchPageState extends State<SearchPage> {
   _allNews() {
     return SingleChildScrollView(
       child: SizedBox(
-        height: 0.90.sh,
+        height: 1.1.sh,
         child: Column(
           children: [
             BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
@@ -148,10 +153,8 @@ class _SearchPageState extends State<SearchPage> {
               }
               if (state is FetchNewsSuccess) {
                 var articles = state.articles!;
-                if(articles.length==0){
-                  return SizedBox(
-                    height: 1.sh,
-                      child: Center(child: Text("Opps!,something wen wrong"),));
+                if(articles.length==0 && !showSuggestions){
+                  return nothing_found();
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -280,7 +283,7 @@ class _SearchPageState extends State<SearchPage> {
                                   bottom: 0,
                                   right: 0,
                                   child: Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color:
                                         NewslyThemeData.borderCornerColor,
                                         borderRadius: BorderRadius.all(
@@ -299,8 +302,8 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 );
               }
-              if(state is FetchNewsFailed){
-                return Center(child: Text('Opps! nothing found'),);
+              if(state is FetchNewsFailed && !showSuggestions){
+                return nothing_found();
               }
               if(state is FetchNewsLoading){
                 return Expanded(child: ShimmerLoaderView(true));
@@ -309,6 +312,37 @@ class _SearchPageState extends State<SearchPage> {
             }),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class nothing_found extends StatelessWidget {
+  const nothing_found({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: .8.sh,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            'assets/svg/not_found_2.svg',
+            width: .5.sw,
+            height: 200,
+          ),
+          SizedBox(height: 20,),
+          Text('Ops! nothing found',style: GoogleFonts.eagleLake(
+            textStyle: const TextStyle(
+                fontSize: 18,
+                color: Colors.blue,
+                fontWeight: FontWeight.bold),
+          ),),
+        ],
       ),
     );
   }

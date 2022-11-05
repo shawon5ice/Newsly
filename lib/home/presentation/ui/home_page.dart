@@ -11,7 +11,6 @@ import 'package:newsly/core/widgets/navigation_drawer.dart';
 import 'package:newsly/core/widgets/pager_swiper.dart';
 import 'package:newsly/core/widgets/shimmer_loader_view.dart';
 import 'package:newsly/details/data/model/news_details_model.dart';
-import 'package:newsly/details/presentation/ui/news_details.dart';
 import 'package:newsly/home/data/model/news_response.dart';
 import 'package:newsly/home/presentation/bloc/home_bloc.dart';
 import 'package:newsly/home/presentation/bloc/home_event.dart';
@@ -21,7 +20,7 @@ import 'package:newsly/search/presentation/ui/search_page.dart';
 import 'package:number_pagination/number_pagination.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import '../widget/corner_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -92,7 +91,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
               children: [
             Flexible(
@@ -117,21 +116,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   labelColor: Colors.white,
                   tabs: [
                     Padding(
-                      padding: EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         'All News',
                         style: GoogleFonts.raleway(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         'Trending',
                         style: GoogleFonts.raleway(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -382,22 +381,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             ),
                             child: Stack(
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                      color: NewslyThemeData.borderCornerColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ),
-                                Container(
-                                  width: 50,
-                                  height: 10,
-                                  decoration: const BoxDecoration(
-                                      color: NewslyThemeData.borderCornerColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ),
+                                CornerWidget(horizontal: true),
+                                CornerWidget(horizontal: false),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 5),
@@ -469,29 +454,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        color:
-                                            NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    width: 10,
-                                    height: 50,
-                                  ),
+                                  child: CornerWidget(horizontal: false,)
                                 ),
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color:
-                                            NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    width: 50,
-                                    height: 10,
-                                  ),
-                                ),
+                                  child: CornerWidget(horizontal: true,),)
                               ],
                             ),
                           ),
