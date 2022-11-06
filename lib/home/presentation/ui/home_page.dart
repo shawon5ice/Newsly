@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:newsly/core/routes/route.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
 import 'package:newsly/core/widgets/navigation_drawer.dart';
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
   late HomeBloc _homeBloc;
   var currentPage = 1;
-  var lastPage = 3;
+  var lastPage = 5;
   String dropDownValue = 'publishedAt';
   int? selectedTabIndex = 0;
   ScrollPhysics scrollPhysicsSetting = const ClampingScrollPhysics();
@@ -103,13 +104,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0.r),
                   border: Border.all(
-                    color: NewslyThemeData.primaryColor,
+                    color: NewslyThemeData.accentColor,
                   ),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   indicator: BoxDecoration(
-                    color: NewslyThemeData.primaryColor,
+                    color: NewslyThemeData.accentColor,
                     borderRadius: BorderRadius.circular(6.0.r),
                   ),
                   unselectedLabelColor: NewslyThemeData.primaryColor,
@@ -188,7 +189,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     final tp = TextPainter(
                       text: span,
                       maxLines: 3,
-                      textDirection: TextDirection.ltr,
                     );
                     tp.layout(maxWidth: 260); // equals the parent screen width
                     double extraSpace = 0;
@@ -440,9 +440,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   angle: 45,
                                                   child: Icon(Icons.link),
                                                 ),
-                                                Text(articles[index]
-                                                    .publishedAt
-                                                    .toString())
+                                                Text(DateFormat.yMd()
+                                                    .format(DateTime.parse(articles[index].publishedAt.toString())) +
+                                                    " At " +
+                                                    DateFormat('HH:mm')
+                                                        .format(DateTime.parse(articles[index].publishedAt.toString())))
                                               ],
                                             )
                                           ],
@@ -492,7 +494,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 pageTotal: lastPage,
                 pageInit: selectedPageNumber,
                 // picked number when init page
-                colorPrimary: Colors.deepPurple,
+                colorPrimary: NewslyThemeData.primaryColor,
                 colorSub: Colors.white,
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
 
 import '../di/app_component.dart';
@@ -94,18 +95,16 @@ class _NavDrawState extends State<NavDraw> {
   Widget build(BuildContext context) {
     bool switchValue = session.darkTheme;
     return Drawer(
+      width: .6.sw,
       child: ListView(
         children: <Widget>[
-          const SizedBox(
-            height: 100.0,
+          Container(
+            color: Colors.black87,
+            height: 200.0,
             child: DrawerHeader(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.none,
-                        image: NetworkImage(
-                            'https://picsum.photos/250?image=9'))), child: null,),
+                 child: SvgPicture.asset('assets/svg/newsly.svg'),),
           ),
           _createDrawerItem(
               icon: Icons.home_outlined,
@@ -137,7 +136,7 @@ class _NavDrawState extends State<NavDraw> {
               }),
           ListTile(
             leading: Icon(Icons.nightlight_round),
-            title: Text(switchValue?'Dark Mode':'Light Mode'),
+            title: Text(switchValue?'Dark':'Light'),
             trailing: ThemeSwitcher(
                 builder: (context)=> Switch.adaptive(
                   value: switchValue,

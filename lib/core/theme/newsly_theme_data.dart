@@ -5,7 +5,7 @@ import 'colors.dart';
 class NewslyThemeData {
 
   static const primaryColor = Color(0xff90CAF9);
-  static const accentColor = Color(0XFFAA2170);
+  static const accentColor = Color(0XFF659aae);
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
   static const iconColor = Color(0XFF666666);
