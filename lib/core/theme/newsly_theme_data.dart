@@ -4,19 +4,23 @@ import 'colors.dart';
 
 class NewslyThemeData {
 
-  static const primaryColor = Color(0xff90CAF9);
+  static const primaryColor = Color(0xff1C6758);
   static const accentColor = Color(0XFF659aae);
   static const borderColor = Color(0XFFCCCCCC);
   static const textColor = Color(0XFF666666);
   static const iconColor = Color(0XFF666666);
   static const background = Color(0XFF1a1c1e);
-  static const borderCornerColor = Color(0xff90CAF9);
+  static var cardColor = Color(0xffF5EDDC);
+  static const borderCornerColor = Color(0xff3D8361);
 
   static ThemeData light() {
     final textTheme = _textTheme();
+    cardColor = Color(0xffF5EDDC);
     return ThemeData(
+      scaffoldBackgroundColor: Color(0xffF5EDDC),
       primaryColor: primaryColor,
       textTheme: textTheme,
+      cardColor: cardColor,
       inputDecorationTheme: inputDecorationTheme(),
       primaryTextTheme: textTheme,
       appBarTheme: _appBarTheme(),
@@ -67,6 +71,8 @@ class NewslyThemeData {
     final textTheme = _textThemeDark();
 
     return ThemeData(
+      scaffoldBackgroundColor: Color(0xff1B1A17),
+      cardColor: Color(0xff262424),
       appBarTheme: _appBarThemeDark(),
       brightness: Brightness.dark,
       primaryColor: Colors.black,

@@ -76,7 +76,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             style: GoogleFonts.kaushanScript(
               textStyle: const TextStyle(
                   fontSize: 18,
-                  color: NewslyThemeData.primaryColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -219,7 +218,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(32),
                                 ),
-                                color: NewslyThemeData.primaryColor,
+                                color: Color(0xffF5EDDC),
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: Column(
@@ -373,7 +372,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   content: articles[index].content));
                         },
                         child: Card(
-                          elevation: 10,
+                          elevation: 4,
                           child: Container(
                             decoration: const BoxDecoration(
                               borderRadius:
@@ -474,12 +473,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               }
               return const Expanded(child: ShimmerLoaderView(true));
             }),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 55,
               child: NumberPagination(
                 controlButton: const Card(
-                  elevation: 5,
+                  elevation: 0,
                   color: Colors.white,
                 ),
                 threshold: 5,
