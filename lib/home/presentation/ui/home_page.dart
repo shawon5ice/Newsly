@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   labelColor: Colors.white,
                   tabs: [
                     Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'All News',
                         style: GoogleFonts.raleway(
@@ -302,16 +303,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   // borderRadius: BorderRadius.circular(500),
                                   child: Hero(
                                     tag: item.publishedAt.toString(),
-                                    child: Image.network(
-                                        item.urlToImage.toString(),
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover, errorBuilder:
-                                            (BuildContext context,
-                                                Object exception,
-                                                StackTrace? stackTrace) {
-                                      return const Text('Opps!!!');
-                                    }),
+                                    child: CachedNetworkImage(
+                                      imageUrl: item
+                                          .urlToImage
+                                          .toString()
+                                          .replaceAll(
+                                          "h_675,pg_1,q_80,w_200",
+                                          "h_100,pg_1,q_50,w_200"),
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          SizedBox(height:200,width:200,child: Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
+                                      errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -483,24 +488,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           tag: articles[index]
                                               .urlToImage
                                               .toString(),
-                                          child: Image.network(
-                                            errorBuilder: (BuildContext context,
-                                                Object exception,
-                                                StackTrace? stackTrace) {
-                                              return const Text('Opps!!!');
-                                            },
-                                            articles[index]
+                                          child: CachedNetworkImage(
+                                            imageUrl: articles[index]
                                                 .urlToImage
                                                 .toString()
                                                 .replaceAll(
-                                                    "h_675,pg_1,q_80,w_1200",
-                                                    "h_100,pg_1,q_50,w_100"),
+                                                "h_675,pg_1,q_80,w_1200",
+                                                "h_100,pg_1,q_50,w_100"),
                                             width: 100,
                                             height: 100,
                                             fit: BoxFit.cover,
+                                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
+                                            errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                                          ),
+
                                           ),
                                         ),
-                                      ),
                                       const SizedBox(
                                         width: 10,
                                       ),

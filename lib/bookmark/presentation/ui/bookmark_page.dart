@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -33,10 +34,13 @@ class BookMarkPage extends StatelessWidget {
 
   Widget buildContent(List<Bookmark> bookmarks) {
     if (bookmarks.isEmpty) {
-      return Center(
+      return Align(
+        alignment: Alignment.center,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/svg/no_bookmark.svg'),
+            SvgPicture.asset('assets/svg/no_bookmark.svg',width: 300,),
             Text('Your bookmarks will appear here'),
           ],
         ),
@@ -103,13 +107,8 @@ class BookMarkPage extends StatelessWidget {
                         tag: bookmark
                             .urlToImage
                             .toString(),
-                        child: Image.network(
-                          errorBuilder: (BuildContext context,
-                              Object exception,
-                              StackTrace? stackTrace) {
-                            return const Text('Opps!!!');
-                          },
-                          bookmark
+                        child: CachedNetworkImage(
+                          imageUrl: bookmark
                               .urlToImage
                               .toString()
                               .replaceAll(
@@ -118,6 +117,9 @@ class BookMarkPage extends StatelessWidget {
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
+                          errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
                         ),
                       ),
                     ),

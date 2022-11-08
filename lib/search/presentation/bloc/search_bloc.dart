@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       logger.printDebugLog(response.toString());
       emit(FetchNewsSuccess(response.data!.articles,response.data!.totalResults!));
     } else {
-      emit(const FetchNewsFailed('No jobs found'));
+      emit(const FetchNewsFailed('No News found'));
     }
   }
 

@@ -49,7 +49,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       logger.printDebugLog(updatedList.toString());
       emit(FetchNewsSuccess(event.nextPageIndex > 1 ? updatedList : response.data!.articles!,response.data!.totalResults!));
     } else {
-      emit(const FetchNewsFailed('No jobs found'));
+      emit(const FetchNewsFailed('No News found'));
     }
   }
   _onFetchNewsFixedPage(FetchNewsEventFixedNumber event, Emitter<HomeState> emit) async {
@@ -61,7 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       "apiKey":API_KEY,
       "q":"*",
       "page": event.pageNo.toString(),
-      "pageSize":10.toString(),
+      "pageSize":25.toString(),
       "sortBy":sortBy,
     },);
 
@@ -70,7 +70,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       articles = response.data!.articles!;
       emit(FetchNewsStateFixedNumber(response.data!.articles!, response.data!.totalResults!));
     } else {
-      emit(const FetchNewsFailed('No jobs found'));
+      emit(const FetchNewsFailed('No News found'));
     }
   }
   _onFetchTrendingNews(FetchTrendingNewsEvent event, Emitter<HomeState> emit) async {

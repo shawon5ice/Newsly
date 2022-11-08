@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
 import 'package:newsly/core/utils/constants.dart';
+import 'package:newsly/home/presentation/widget/corner_widget.dart';
 import 'package:newsly/search/presentation/bloc/search_bloc.dart';
 import 'package:newsly/search/presentation/bloc/search_event.dart';
 import 'package:newsly/search/presentation/bloc/search_state.dart';
@@ -182,22 +184,8 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             child: Stack(
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                      color: NewslyThemeData.borderCornerColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ),
-                                Container(
-                                  width: 50,
-                                  height: 10,
-                                  decoration: const BoxDecoration(
-                                      color: NewslyThemeData.borderCornerColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ),
+                                CornerWidget(horizontal: true),
+                                CornerWidget(horizontal: false),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 5),
@@ -212,13 +200,8 @@ class _SearchPageState extends State<SearchPage> {
                                           tag: articles[index]
                                               .urlToImage
                                               .toString(),
-                                          child: Image.network(
-                                            errorBuilder: (BuildContext context,
-                                                Object exception,
-                                                StackTrace? stackTrace) {
-                                              return const Text('Opps!!!');
-                                            },
-                                            articles[index]
+                                          child: CachedNetworkImage(
+                                            imageUrl: articles[index]
                                                 .urlToImage
                                                 .toString()
                                                 .replaceAll(
@@ -227,6 +210,9 @@ class _SearchPageState extends State<SearchPage> {
                                             width: 100,
                                             height: 100,
                                             fit: BoxFit.cover,
+                                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
+                                            errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
                                           ),
                                         ),
                                       ),
@@ -269,28 +255,12 @@ class _SearchPageState extends State<SearchPage> {
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        color:
-                                        NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    width: 10,
-                                    height: 50,
-                                  ),
+                                  child: CornerWidget(horizontal: true,),
                                 ),
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        color:
-                                        NewslyThemeData.borderCornerColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    width: 50,
-                                    height: 10,
-                                  ),
+                                  child: CornerWidget(horizontal: false,),
                                 ),
                               ],
                             ),
