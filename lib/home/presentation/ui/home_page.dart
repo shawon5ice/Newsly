@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:newsly/core/routes/route.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
@@ -30,11 +32,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+int selected = 1;
+int lastPage = 5;
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
   late HomeBloc _homeBloc;
   var currentPage = 1;
-  var lastPage = 5;
   String dropDownValue = 'publishedAt';
   int? selectedTabIndex = 0;
   ScrollPhysics scrollPhysicsSetting = const ClampingScrollPhysics();
@@ -103,13 +106,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0.r),
                   border: Border.all(
-                    color: NewslyThemeData.accentColor,
+                    color: NewslyThemeData.primaryColor,
                   ),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   indicator: BoxDecoration(
-                    color: NewslyThemeData.accentColor,
+                    color: NewslyThemeData.primaryColor,
                     borderRadius: BorderRadius.circular(6.0.r),
                   ),
                   unselectedLabelColor: NewslyThemeData.primaryColor,
@@ -176,24 +179,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   items: state.articles,
                   onHideFab: (hide) {},
                   itemBuilder: (context, item) {
-                    final span = TextSpan(
-                      text: item.title.toString(),
-                      style: const TextStyle(
-                          fontFamily: 'Avenir',
-                          fontSize: 24,
-                          color: NewslyThemeData.textColor,
-                          fontWeight: FontWeight.w900,
-                          overflow: TextOverflow.ellipsis),
-                    );
-                    final tp = TextPainter(
-                      text: span,
-                      maxLines: 3,
-                    );
-                    tp.layout(maxWidth: 260); // equals the parent screen width
-                    double extraSpace = 0;
-                    if (tp.computeLineMetrics().length <= 3) {
-                      extraSpace = (3 - tp.computeLineMetrics().length) * 20.0;
-                    }
+                    // final span = TextSpan(
+                    //   text: item.title.toString(),
+                    //   style: const TextStyle(
+                    //       fontFamily: 'Avenir',
+                    //       fontSize: 24,
+                    //       color: NewslyThemeData.textColor,
+                    //       fontWeight: FontWeight.w900,
+                    //       overflow: TextOverflow.ellipsis),
+                    // );
+                    // final tp = TextPainter(
+                    //   text: span,
+                    //   maxLines: 3,
+                    // );
+                    // tp.layout(maxWidth: 260); // equals the parent screen width
+                    // double extraSpace = 0;
+                    // if (tp.computeLineMetrics().length <= 3) {
+                    //   extraSpace = (3 - tp.computeLineMetrics().length) * 20.0;
+                    // }
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamed(newsDetails,
@@ -218,28 +221,60 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(32),
                                 ),
-                                color: Color(0xffF5EDDC),
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      const SizedBox(height: 150),
-                                      Text(
-                                        item.title.toString(),
-                                        style: const TextStyle(
-                                            fontFamily: 'Avenir',
-                                            fontSize: 20,
-                                            color: Color(0xff333242),
-                                            fontWeight: FontWeight.w900,
-                                            overflow: TextOverflow.ellipsis),
-                                        maxLines: 3,
-                                        textAlign: TextAlign.left,
+                                      const SizedBox(height: 130),
+                                      Container(
+                                        height: 140,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              item.title.toString(),
+                                              style: GoogleFonts.lato(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              maxLines: 3,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            const SizedBox(height: 10,),
+                                            Text("- ${item.author}",
+                                              style: GoogleFonts.lato(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              maxLines: 3,
+                                              textAlign: TextAlign.right,
+                                            ),
+                                            Spacer(),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                const FaIcon(
+                                                  FontAwesomeIcons.clock,
+                                                  color: NewslyThemeData.primaryColor,
+                                                  size: 16,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text("${DateFormat.yMMMd()
+                                                    .format(DateTime.parse(item.publishedAt.toString()))} At ${DateFormat('hh:mm a')
+                                                    .format(DateTime.parse(item.publishedAt.toString()))}",
+                                                  style: GoogleFonts.ralewayDots(
+                                                    textStyle: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.bold),
+                                                  ),)
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        height: 20 + extraSpace,
-                                      )
                                     ],
                                   ),
                                 ),
@@ -307,38 +342,90 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _allNews(int selectedPageNumber) {
+    var _chosenValue;
     return SingleChildScrollView(
       child: SizedBox(
         height: 520.h,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: DropdownButton<String>(
-                  value: dropDownValue,
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  // Array list of items
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropDownValue = newValue!;
-                      _homeBloc.sortBy = dropDownValue;
-                      selectedPageNumber = 1;
-                      currentPage = 1;
-                      _homeBloc.add(const FetchNewsEventFixedNumber(1));
-                    });
-                  },
+            Align(
+              alignment: Alignment.centerRight,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      hint: Text(
+                        'Sort By',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme
+                              .of(context)
+                              .hintColor,
+                        ),
+                      ),
+                        barrierLabel: 'Sort By',
+                      items: items
+                          .map((item) =>
+                          DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ))
+                          .toList(),
+                      value: dropDownValue,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropDownValue = newValue!;
+                            _homeBloc.sortBy = dropDownValue;
+                            selectedPageNumber = 1;
+                            currentPage = 1;
+                            _homeBloc.add(const FetchNewsEventFixedNumber(1));
+                          });
+                        },
+                      buttonHeight: 40,
+                      buttonWidth: 120,
+                      itemHeight: 40,
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                      dropdownMaxHeight: 200,
+                      dropdownPadding: null,
+                    ),
+                  ),
                 ),
               ),
+
+
+
+              // DropdownButton<String>(
+              //   value: dropDownValue,
+              //   //elevation: 5,
+              //   dropdownColor: NewslyThemeData.primaryColor,
+              //   onChanged: (String? newValue) {
+              //     setState(() {
+              //       dropDownValue = newValue!;
+              //       _homeBloc.sortBy = dropDownValue;
+              //       selectedPageNumber = 1;
+              //       currentPage = 1;
+              //       _homeBloc.add(const FetchNewsEventFixedNumber(1));
+              //     });
+              //   },
+              //   items: items.map<DropdownMenuItem<String>>((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(value),
+              //     );
+              //   }).toList(),
+              //   hint: Text(
+              //     "Sort By",
+              //     style: TextStyle(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.w600),
+              //   ),
+              // ),
             ),
             BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
               if (state is FetchNewsStateFixedNumber) {
@@ -430,7 +517,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 18),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -439,11 +526,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   angle: 45,
                                                   child: Icon(Icons.link),
                                                 ),
-                                                Text(DateFormat.yMd()
-                                                    .format(DateTime.parse(articles[index].publishedAt.toString())) +
-                                                    " At " +
-                                                    DateFormat('HH:mm')
-                                                        .format(DateTime.parse(articles[index].publishedAt.toString())))
+                                                Text("${DateFormat.yMd()
+                                                    .format(DateTime.parse(articles[index].publishedAt.toString()))} At ${DateFormat('HH:mm')
+                                                        .format(DateTime.parse(articles[index].publishedAt.toString()))}")
                                               ],
                                             )
                                           ],
@@ -479,19 +564,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: NumberPagination(
                 controlButton: const Card(
                   elevation: 0,
-                  color: Colors.white,
+                  color: Colors.yellow,
                 ),
                 threshold: 5,
                 onPageChanged: (int pageNumber) {
                   //do somthing for selected page
                   setState(() {
                     selectedPageNumber = pageNumber;
+                    selected = pageNumber;
                     _homeBloc
                         .add(FetchNewsEventFixedNumber(selectedPageNumber));
                   });
                 },
                 pageTotal: lastPage,
-                pageInit: selectedPageNumber,
+                pageInit: selected,
                 // picked number when init page
                 colorPrimary: NewslyThemeData.primaryColor,
                 colorSub: Colors.white,

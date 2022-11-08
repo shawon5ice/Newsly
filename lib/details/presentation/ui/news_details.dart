@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -70,6 +72,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Completer<WebViewController> _controller = Completer<WebViewController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -220,9 +223,18 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                   ),
                 ]),
               ),
-              WebView(
-                initialUrl: news.url,
-              )
+              Container(
+                color: NewslyThemeData.cardColor,
+                height: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.vertical,
+                child: WebView(
+                  initialUrl: news.url,
+                  javascriptMode: JavascriptMode.disabled,
+                  onWebViewCreated: (WebViewController webViewController) {
+                    _controller.complete(webViewController);
+                  },
+                ),
+              ),
             ],
           ),
         ),

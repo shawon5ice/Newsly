@@ -77,7 +77,7 @@ class ShimmerTrendingLoaderView extends StatelessWidget {
       child: Center(
         child: Shimmer.fromColors(
           baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
+          highlightColor: Colors.grey.shade500,
           enabled: enabled,
           child: Card(
             shape: RoundedRectangleBorder(

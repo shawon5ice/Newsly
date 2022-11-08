@@ -149,8 +149,8 @@ class _NavDrawState extends State<NavDraw> with TickerProviderStateMixin {
                           session.darkTheme = switchValue;
                         },
                         child: Icon(
-                          !switchValue ? Icons.nightlight_round : Icons.sunny,
-                          color: !switchValue ? Colors.white : Colors.orange,
+                          switchValue ? Icons.nightlight_round : Icons.sunny,
+                          color: switchValue ? Colors.white : Colors.orange,
                         ),
                       ),
                     ),
@@ -187,25 +187,6 @@ class _NavDrawState extends State<NavDraw> with TickerProviderStateMixin {
                   selectedIndex = 1;
                 });
               }),
-          ListTile(
-            leading: Icon(Icons.nightlight_round),
-            title: Text(switchValue ? 'Dark' : 'Light'),
-            trailing: ThemeSwitcher(
-                builder: (context) => Switch.adaptive(
-                      value: switchValue,
-                      onChanged: (value) {
-                        var brightness = ThemeModelInheritedNotifier.of(context)
-                            .theme
-                            .brightness;
-                        ThemeSwitcher.of(context).changeTheme(
-                            theme: brightness == Brightness.light
-                                ? NewslyThemeData.dark()
-                                : NewslyThemeData.light());
-                        switchValue = !switchValue;
-                        session.darkTheme = switchValue;
-                      },
-                    )),
-          ),
         ],
       ),
     );
@@ -218,9 +199,9 @@ Widget _createDrawerItem(
     required GestureTapCallback onTap,
     required bool isSelected}) {
   return ListTile(
-    selectedTileColor:
+    tileColor:
         isSelected ? NewslyThemeData.cardColor : Colors.transparent,
-    selected: true,
+    // selected: true,
     title: Row(
       children: <Widget>[
         Icon(icon),
