@@ -23,7 +23,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
   bool showSuggestions = true;
   late SearchBloc _searchBloc;
@@ -70,9 +70,9 @@ class _SearchPageState extends State<SearchPage> {
                           focusNode.unfocus();
                           Navigator.pop(context);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Icon(Icons.arrow_back_ios),
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Icon(Icons.arrow_back_ios,color: NewslyThemeData.primaryColor,),
                         )),
                     Flexible(
                       child: TextField(
@@ -86,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           fillColor: Colors.transparent,
-                          contentPadding: EdgeInsets.only(bottom: 5, left: 10),
+                          contentPadding: const EdgeInsets.only(bottom: 5, left: 10),
                           hintText: 'Search',
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
@@ -97,7 +97,7 @@ class _SearchPageState extends State<SearchPage> {
                                 focusNode.unfocus();
                                 _textEditingController.clear();
                               },
-                              child: Icon(
+                              child: const Icon(
                                 size: 18,
                                 Icons.close,
                                 color: Colors.red,
@@ -110,12 +110,12 @@ class _SearchPageState extends State<SearchPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               showSuggestions
                   ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Wrap(
                         spacing: 10,
                         children: SearchItems.map(
@@ -124,8 +124,8 @@ class _SearchPageState extends State<SearchPage> {
                               _textEditingController.text = item;
                             },
                             child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                padding: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 5),
                                 decoration: BoxDecoration(
                                     border: Border.all(
@@ -135,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ).toList()),
                   )
-                  : SizedBox(),
+                  : const SizedBox(),
                   _allNews(),
             ],
           ),
@@ -151,12 +151,12 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
               if(state is FetchNewsLoading){
-                return ShimmerLoaderView(true);
+                return const ShimmerLoaderView(true);
               }
               if (state is FetchNewsSuccess) {
                 var articles = state.articles!;
-                if(articles.length==0 && !showSuggestions){
-                  return nothing_found();
+                if(articles.isEmpty && !showSuggestions){
+                  return const nothing_found();
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -212,7 +212,7 @@ class _SearchPageState extends State<SearchPage> {
                                             fit: BoxFit.cover,
                                             progressIndicatorBuilder: (context, url, downloadProgress) =>
                                                 SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
-                                            errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                                            errorWidget: (context, url, error) => const Icon(Icons.image_not_supported,size: 100,),
                                           ),
                                         ),
                                       ),
@@ -232,7 +232,7 @@ class _SearchPageState extends State<SearchPage> {
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 18),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -294,24 +294,28 @@ class nothing_found extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: .8.sh,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            'assets/svg/not_found_2.svg',
+            'assets/svg/not_found_3.svg',
             width: .5.sw,
             height: 200,
           ),
-          SizedBox(height: 20,),
-          Text('Ops! nothing found',style: GoogleFonts.eagleLake(
-            textStyle: const TextStyle(
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Ops! There is no news.',
+            style: GoogleFonts.roboto(
+              textStyle: const TextStyle(
                 fontSize: 18,
-                color: Colors.blue,
-                fontWeight: FontWeight.bold),
-          ),),
+              ),
+            ),
+          ),
         ],
       ),
     );
