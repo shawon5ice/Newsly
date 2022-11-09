@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "368221296224",
+    "project_id": "newsly-news-for-all",
+    "storage_bucket": "newsly-news-for-all.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368221296224:android:52ebf632509e41291f5505",
+        "android_client_info": {
+          "package_name": "com.ssquare.newsly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368221296224-lm33uno2au27r4oo86udoh8lo05ilis2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt6CfMsOeEGq2Pq1Mft5AnC2FI20PYnRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368221296224-lm33uno2au27r4oo86udoh8lo05ilis2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
