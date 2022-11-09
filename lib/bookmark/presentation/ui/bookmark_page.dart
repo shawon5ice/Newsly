@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:newsly/core/service/bookmark/bookmark.dart';
@@ -16,18 +17,29 @@ class BookMarkPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: NavDraw(),
-      appBar: AppBar(title: const Text('Bookmarks'),),
-      body: ValueListenableBuilder<Box<Bookmark>>(
-        valueListenable: Boxes.getBookmarks().listenable(),
-        builder: (context, box, _) {
-          var items = box.values.toList();
-          items.sort((a, b) => b.timeStamp.compareTo(a.timeStamp));
-          // final bookmarks = box.values.where((element) => element.timeStamp.compareTo(other))
+    return WillPopScope(
 
-          return buildContent(items);
-        },
+      onWillPop: () async {
+        selectedIndex = 0;
+        return true;
+      },
+      child: Scaffold(
+        drawer: NavDraw(),
+        appBar: AppBar(title: Text('Bookmarks', style: GoogleFonts.kaushanScript(
+        textStyle: const TextStyle(
+        fontSize: 18,
+            fontWeight: FontWeight.bold),
+        ),),),
+        body: ValueListenableBuilder<Box<Bookmark>>(
+          valueListenable: Boxes.getBookmarks().listenable(),
+          builder: (context, box, _) {
+            var items = box.values.toList();
+            items.sort((a, b) => b.timeStamp.compareTo(a.timeStamp));
+            // final bookmarks = box.values.where((element) => element.timeStamp.compareTo(other))
+
+            return buildContent(items);
+          },
+        ),
       ),
     );
   }
@@ -41,7 +53,10 @@ class BookMarkPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/svg/no_bookmark.svg',width: 300,),
-            Text('Your bookmarks will appear here'),
+            Text('Your bookmarks will appear here',style: GoogleFonts.roboto(
+              textStyle: const TextStyle(
+                  fontSize: 18,),
+            ),),
           ],
         ),
       );
@@ -119,8 +134,9 @@ class BookMarkPage extends StatelessWidget {
                           fit: BoxFit.cover,
                           progressIndicatorBuilder: (context, url, downloadProgress) =>
                               SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
-                          errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                          errorWidget: (context, url, error) => const Icon(Icons.image_not_supported,size: 100,),
                         ),
+
                       ),
                     ),
                     const SizedBox(
@@ -135,24 +151,26 @@ class BookMarkPage extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             bookmark.title.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
+                            style: GoogleFonts.raleway(
+                              textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          SizedBox(
-                            height: 10,
+                          const SizedBox(
+                            height: 15,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Transform.rotate(
-                                angle: 45,
-                                child: Icon(Icons.link),
-                              ),
-                              Text(DateFormat.yMd()
-                                  .format(DateTime.parse(bookmark.publishedAt.toString())) +
-                                  " At " +
-                                  DateFormat('HH:mm')
-                                      .format(DateTime.parse(bookmark.publishedAt.toString())))
+                              const Icon(Icons.access_time ,size: 16,),
+                              const SizedBox(width: 5,),
+                              Text("${DateFormat.yMd()
+                                  .format(DateTime.parse(bookmark.publishedAt.toString()))} At ${DateFormat('HH:mm')
+                                  .format(DateTime.parse(bookmark.publishedAt.toString()))}",style: GoogleFonts.roboto(
+                                textStyle: const TextStyle(
+                                    fontSize: 12),
+                              ),)
                             ],
                           )
                         ],

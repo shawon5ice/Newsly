@@ -1,15 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:newsly/core/logger/logger.dart';
 import 'package:newsly/core/theme/newsly_theme_data.dart';
-import 'package:newsly/core/utils/constants.dart';
 import 'package:newsly/details/data/model/news_details_model.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -43,11 +39,11 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
       ..title = news.title.toString()
       ..description = news.description.toString();
 
-    var _bookmarkCheck = box.values
+    var bookmarkCheck = box.values
         .where((element) => news.publishedAt == element.publishedAt)
         .isNotEmpty;
 
-    if (_bookmarkCheck) {
+    if (bookmarkCheck) {
       isBookmarked = true;
       logger.printDebugLog("true");
     }
@@ -72,7 +68,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Completer<WebViewController> _controller = Completer<WebViewController>();
+    Completer<WebViewController> controller = Completer<WebViewController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -88,62 +84,53 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   Flexible(
                     child: Text(
                       news.title.toString(),
-                      textAlign: TextAlign.justify,
-                      style: GoogleFonts.raleway(
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(width: 10),
-                      FaIcon(
-                        FontAwesomeIcons.clock,
-                        color: NewslyThemeData.primaryColor,
-                      ),
-                      SizedBox(width: 10),
-                      Text(DateFormat.yMMMd()
-                              .format(DateTime.parse(news.publishedAt.toString())) +
-                          " At " +
-                          DateFormat('hh:mm a')
-                              .format(DateTime.parse(news.publishedAt.toString())))
+                      const Icon(Icons.access_time ,size: 16,),
+                      const SizedBox(width: 10,),
+                      Text("${DateFormat.yMMMd()
+                          .format(DateTime.parse(news.publishedAt.toString()))} At ${DateFormat('hh:mm a')
+                          .format(DateTime.parse(news.publishedAt.toString()))}",style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                            fontSize: 12),
+                      ),)
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Stack(
                     children: [
                       Hero(
                         tag: news.urlToImage.toString(),
-                        child: Image.network(
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              height: 300,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              ),
-                            );
-                          },
-                          news.urlToImage.toString(),
-                          height: 300,
+                        child: CachedNetworkImage(
+                          imageUrl: news
+                              .urlToImage
+                              .toString()
+                              .replaceAll(
+                              "h_675,pg_1,q_80,w_300",
+                              "w_100,pg_1,q_50,w_300"),
+                          height: 250,
                           fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
+                          errorWidget: (context, url, error) => const Icon(Icons.image_not_supported,size: 300,),
                         ),
                       ),
                       Positioned(
@@ -155,11 +142,11 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               onTap: () {
                                 if (isBookmarked) {
                                   isBookmarked = false;
-                                  var _task = box.values
+                                  var task = box.values
                                       .where((element) =>
                                           news.publishedAt == element.publishedAt)
                                       .first;
-                                  _task.delete();
+                                  task.delete();
                                 } else {
                                   addBookmark(news);
                                   logger.printDebugLog("Bookmarked...");
@@ -173,7 +160,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Icon(
                                     isBookmarked
                                         ? Icons.bookmark
@@ -195,7 +182,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                                 elevation: 10,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50)),
-                                child: Padding(
+                                child: const Padding(
                                   padding: EdgeInsets.all(10),
                                   child: Icon(
                                     Icons.ios_share_outlined,
@@ -225,13 +212,12 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
               ),
               Container(
                 color: NewslyThemeData.cardColor,
-                height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).padding.vertical,
+                height: 5000,
                 child: WebView(
                   initialUrl: news.url,
                   javascriptMode: JavascriptMode.disabled,
                   onWebViewCreated: (WebViewController webViewController) {
-                    _controller.complete(webViewController);
+                    controller.complete(webViewController);
                   },
                 ),
               ),
@@ -253,7 +239,6 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
       ..title = news.title.toString()
       ..description = news.description.toString()
       ..timeStamp = DateTime.now().toIso8601String();
-    ;
 
     box.add(bookmark);
     logger.printDebugLog("Bookmarked...");
@@ -261,23 +246,5 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
 
   void deleteBookMark(Bookmark bookmark) {
     bookmark.delete();
-  }
-
-  Future<void> share() async {
-    await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
-        linkUrl: 'https://flutter.dev/',
-        chooserTitle: 'Example Chooser Title');
-  }
-
-  _onShare(String text) async {
-    final box = context.findRenderObject() as RenderBox?;
-
-    await Share.share(
-      text,
-      subject: "Share this news...",
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
   }
 }

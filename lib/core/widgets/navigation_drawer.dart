@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,75 +10,6 @@ import '../di/app_component.dart';
 import '../routes/route.dart';
 import '../session/session_manager.dart';
 
-// class NavigationDrawer extends StatefulWidget {
-//   NavigationDrawer({Key? key}) : super(key: key);
-//
-//   @override
-//   State<NavigationDrawer> createState() => _NavigationDrawerState();
-// }
-//
-// class _NavigationDrawerState extends State<NavigationDrawer> {
-//
-//   var session = locator<SessionManager>();
-//
-//   int selectedIndex = 0;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Drawer(
-//       child: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             const SizedBox(height: 60,),
-//             buildHeader(context),
-//             buildMenu(context),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget buildHeader(BuildContext context){
-//     return Container();
-//   }
-//
-//   Widget buildMenu(BuildContext context){
-//     bool switchValue = session.darkTheme;
-//     return Container(
-//       padding: EdgeInsets.all(24),
-//       child: Wrap(
-//         children: [
-//           ListTile(
-//             selectedColor: NewslyThemeData.primaryColor,
-//             selected: selectedIndex == 0,
-//             leading: Icon(Icons.home_outlined),
-//             title: Text('Home'),
-//             onTap: (){
-//               setState(() {
-//                 selectedIndex = 0;
-//               });
-//               Navigator.pushReplacementNamed(context, home);
-//             },
-//           ),
-//
-//           ListTile(
-//             selectedColor: NewslyThemeData.primaryColor,
-//             selected: selectedIndex == 2,
-//             onTap: (){
-//               setState(() {
-//                 selectedIndex = 2;
-//               });
-//               Navigator.pop(context);
-//               Navigator.pushReplacementNamed(context, bookmarkPage);
-//             },
-//             leading: Icon(Icons.bookmark),
-//             title: Text('Bookmarks'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class NavDraw extends StatefulWidget {
   @override
@@ -120,7 +50,7 @@ class _NavDrawState extends State<NavDraw> with TickerProviderStateMixin {
                 color: Colors.black45,
                 height: 200.0,
                 child: DrawerHeader(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   padding: EdgeInsets.zero,
                   child: SvgPicture.asset(
                     'assets/svg/newsly.svg',
@@ -200,13 +130,13 @@ Widget _createDrawerItem(
     required bool isSelected}) {
   return ListTile(
     tileColor:
-        isSelected ? NewslyThemeData.cardColor : Colors.transparent,
+        isSelected ? NewslyThemeData.primaryColor : Colors.transparent,
     // selected: true,
     title: Row(
       children: <Widget>[
         Icon(icon),
         Padding(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           child: Text(text),
         )
       ],

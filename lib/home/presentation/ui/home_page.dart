@@ -1,30 +1,19 @@
 import 'dart:async';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:newsly/core/routes/route.dart';
-import 'package:newsly/core/theme/newsly_theme_data.dart';
-import 'package:newsly/core/widgets/navigation_drawer.dart';
-import 'package:newsly/core/widgets/pager_swiper.dart';
-import 'package:newsly/core/widgets/shimmer_loader_view.dart';
-import 'package:newsly/details/data/model/news_details_model.dart';
-import 'package:newsly/home/data/model/news_response.dart';
-import 'package:newsly/home/presentation/bloc/home_bloc.dart';
-import 'package:newsly/home/presentation/bloc/home_event.dart';
-import 'package:newsly/home/presentation/bloc/home_state.dart';
-import 'package:newsly/search/presentation/bloc/search_bloc.dart';
-import 'package:newsly/search/presentation/ui/search_page.dart';
-import 'package:number_pagination/number_pagination.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import '../widget/corner_widget.dart';
+
+import 'package:newsly/core/core.dart';
+import 'package:newsly/details/data/model/news_details_model.dart';
+import 'package:newsly/home/home.dart';
+import 'package:newsly/search/search.dart';
+import 'package:number_pagination/number_pagination.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -91,7 +80,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     create: (context) => SearchBloc(),
                     child: const SearchPage(),
                   ), type: PageTransitionType.rightToLeft));
-                }, icon: const Icon(CupertinoIcons.search))
+                }, icon: const Icon(Icons.search))
           ],
         ),
         body: Padding(
@@ -229,7 +218,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       const SizedBox(height: 130),
-                                      Container(
+                                      SizedBox(
                                         height: 140,
                                         child: Column(
                                           children: [
@@ -250,15 +239,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold),
                                               ),
-                                              maxLines: 3,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.right,
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons.clock,
+                                                const Icon(Icons.access_time,
                                                   color: NewslyThemeData.primaryColor,
                                                   size: 16,
                                                 ),
@@ -315,7 +304,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder: (context, url, downloadProgress) =>
                                           SizedBox(height:200,width:200,child: Center(child: CircularProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
-                                      errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                                      errorWidget: (context, url, error) => const Icon(Icons.image_not_supported,size: 100,),
                                     ),
                                   ),
                                 ),
@@ -347,7 +336,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _allNews(int selectedPageNumber) {
-    var _chosenValue;
     return SingleChildScrollView(
       child: SizedBox(
         height: 520.h,
@@ -402,35 +390,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-
-
-
-              // DropdownButton<String>(
-              //   value: dropDownValue,
-              //   //elevation: 5,
-              //   dropdownColor: NewslyThemeData.primaryColor,
-              //   onChanged: (String? newValue) {
-              //     setState(() {
-              //       dropDownValue = newValue!;
-              //       _homeBloc.sortBy = dropDownValue;
-              //       selectedPageNumber = 1;
-              //       currentPage = 1;
-              //       _homeBloc.add(const FetchNewsEventFixedNumber(1));
-              //     });
-              //   },
-              //   items: items.map<DropdownMenuItem<String>>((String value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value,
-              //       child: Text(value),
-              //     );
-              //   }).toList(),
-              //   hint: Text(
-              //     "Sort By",
-              //     style: TextStyle(
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.w600),
-              //   ),
-              // ),
             ),
             BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
               if (state is FetchNewsStateFixedNumber) {
@@ -500,7 +459,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             fit: BoxFit.cover,
                                             progressIndicatorBuilder: (context, url, downloadProgress) =>
                                                 SizedBox(height:10,width:80,child: Center(child: LinearProgressIndicator(value: downloadProgress.progress,color: NewslyThemeData.primaryColor,))),
-                                            errorWidget: (context, url, error) => Icon(Icons.image_not_supported,size: 100,),
+                                            errorWidget: (context, url, error) => const Icon(Icons.image_not_supported,size: 100,),
                                           ),
 
                                           ),
@@ -517,22 +476,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               articles[index].title.toString(),
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18),
+                                                style: GoogleFonts.raleway(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
                                             ),
                                             const SizedBox(
-                                              height: 10,
+                                              height: 15,
                                             ),
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Transform.rotate(
-                                                  angle: 45,
-                                                  child: Icon(Icons.link),
-                                                ),
+                                                const Icon(Icons.access_time ,size: 16,),
+                                                const SizedBox(width: 5,),
                                                 Text("${DateFormat.yMd()
                                                     .format(DateTime.parse(articles[index].publishedAt.toString()))} At ${DateFormat('HH:mm')
-                                                        .format(DateTime.parse(articles[index].publishedAt.toString()))}")
+                                                        .format(DateTime.parse(articles[index].publishedAt.toString()))}",style: GoogleFonts.roboto(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 12),
+                                                ),)
                                               ],
                                             )
                                           ],
